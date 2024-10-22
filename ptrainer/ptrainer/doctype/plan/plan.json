@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-10-23 03:19:36.429156",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "client",
+  "membership",
+  "column_break_navm",
+  "start",
+  "end",
+  "day_1_tab",
+  "d1_cheat",
+  "d1_m",
+  "column_break_tlqe",
+  "d1_rest",
+  "d1_e"
+ ],
+ "fields": [
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Client",
+   "link_filters": "[[\"Client\",\"enabled\",\"=\",1]]",
+   "options": "Client",
+   "reqd": 1
+  },
+  {
+   "fieldname": "membership",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Membership",
+   "link_filters": "[[\"Membership\",\"active\",\"=\",1]]",
+   "options": "Membership",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_navm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start",
+   "fieldtype": "Date",
+   "label": "Start"
+  },
+  {
+   "fieldname": "end",
+   "fieldtype": "Date",
+   "label": "End"
+  },
+  {
+   "fieldname": "day_1_tab",
+   "fieldtype": "Tab Break",
+   "label": "Day 1"
+  },
+  {
+   "default": "0",
+   "fieldname": "d1_cheat",
+   "fieldtype": "Check",
+   "label": "Cheat"
+  },
+  {
+   "fieldname": "d1_m",
+   "fieldtype": "Table",
+   "label": "Day 1 Meals",
+   "options": "Foods"
+  },
+  {
+   "fieldname": "column_break_tlqe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "d1_rest",
+   "fieldtype": "Check",
+   "label": "Rest"
+  },
+  {
+   "fieldname": "d1_e",
+   "fieldtype": "Table",
+   "label": "Day 1 Exercises",
+   "options": "Exercises"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-10-23 03:29:16.551935",
+ "modified_by": "Administrator",
+ "module": "Ptrainer",
+ "name": "Plan",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
