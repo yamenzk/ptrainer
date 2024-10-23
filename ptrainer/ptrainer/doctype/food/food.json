@@ -6,7 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "fdcid",
+  "details_tab",
   "html_ruvd",
   "image",
   "enabled",
@@ -14,14 +14,16 @@
   "title",
   "category",
   "description",
-  "column_break_brwp",
-  "nutritional_facts"
+  "nutrition_tab",
+  "nutritional_facts",
+  "fdc_tab",
+  "fdcid"
  ],
  "fields": [
   {
+   "allow_in_quick_entry": 1,
    "fieldname": "fdcid",
    "fieldtype": "Int",
-   "in_list_view": 1,
    "label": "FDCID",
    "reqd": 1,
    "unique": 1
@@ -29,7 +31,7 @@
   {
    "fieldname": "html_ruvd",
    "fieldtype": "HTML",
-   "options": "<img src=\"{{doc.image}}\" width=\"250\">"
+   "options": "<img src=\"{{doc.image}}\" width=\"250\" style=\"border-radius:12px; margin-bottom:12px\">"
   },
   {
    "fieldname": "image",
@@ -56,31 +58,47 @@
   {
    "fieldname": "category",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "in_preview": 1,
    "label": "Category"
   },
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
+   "in_list_view": 1,
    "in_preview": 1,
    "label": "Description"
-  },
-  {
-   "fieldname": "column_break_brwp",
-   "fieldtype": "Column Break"
   },
   {
    "description": "per 100g",
    "fieldname": "nutritional_facts",
    "fieldtype": "Table",
    "label": "Nutritional Facts",
-   "options": "Nutritional Facts"
+   "options": "Nutritional Facts",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: (doc.fdcid && !doc.__islocal)",
+   "fieldname": "nutrition_tab",
+   "fieldtype": "Tab Break",
+   "label": "Nutrition"
+  },
+  {
+   "depends_on": "eval: (doc.fdcid && !doc.__islocal)",
+   "fieldname": "details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "fdc_tab",
+   "fieldtype": "Tab Break",
+   "label": "FDC"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-23 03:02:41.140483",
+ "modified": "2024-10-23 17:42:30.590904",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Food",
@@ -111,6 +129,7 @@
    "write": 1
   }
  ],
+ "quick_entry": 1,
  "show_preview_popup": 1,
  "show_title_field_in_link": 1,
  "sort_field": "creation",

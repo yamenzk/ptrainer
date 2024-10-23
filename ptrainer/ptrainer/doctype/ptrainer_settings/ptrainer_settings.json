@@ -7,10 +7,10 @@
  "engine": "InnoDB",
  "field_order": [
   "food_tab",
-  "usda_fdc_key",
+  "fdc_api",
   "column_break_enjm",
   "auto_image",
-  "unsplash_key",
+  "unsplash_api",
   "targets_tab",
   "column_break_oomh",
   "default_height",
@@ -383,20 +383,8 @@
    "label": "Food"
   },
   {
-   "fieldname": "usda_fdc_key",
-   "fieldtype": "Data",
-   "label": "FDC API Key"
-  },
-  {
    "fieldname": "column_break_enjm",
    "fieldtype": "Column Break"
-  },
-  {
-   "depends_on": "eval:doc.auto_image",
-   "fieldname": "unsplash_key",
-   "fieldtype": "Data",
-   "label": "Unsplash API Key",
-   "mandatory_depends_on": "eval:doc.auto_image"
   },
   {
    "fieldname": "targets_tab",
@@ -408,13 +396,25 @@
    "fieldname": "auto_image",
    "fieldtype": "Check",
    "label": "Automatically Fetch Images"
+  },
+  {
+   "fieldname": "fdc_api",
+   "fieldtype": "Data",
+   "label": "FDC API Key"
+  },
+  {
+   "depends_on": "eval:doc.auto_image",
+   "fieldname": "unsplash_api",
+   "fieldtype": "Data",
+   "label": "Unsplash API Key",
+   "mandatory_depends_on": "eval:doc.auto_image"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-10-23 16:37:25.735329",
+ "modified": "2024-10-23 16:47:31.532401",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Ptrainer Settings",
