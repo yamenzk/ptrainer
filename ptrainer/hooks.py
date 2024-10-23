@@ -148,23 +148,23 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"ptrainer.tasks.all"
-# 	],
-# 	"daily": [
-# 		"ptrainer.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"ptrainer.tasks.hourly"
-# 	],
+scheduler_events = {
+	# "all": [
+	# 	"ptrainer.tasks.all"
+	# ],
+	# "daily": [
+	# 	"ptrainer.tasks.daily"
+	# ],
+	"hourly": [
+		"ptrainer.ptrainer.doctype.membership.membership.update_membership_statuses"
+	],
 # 	"weekly": [
 # 		"ptrainer.tasks.weekly"
 # 	],
 # 	"monthly": [
 # 		"ptrainer.tasks.monthly"
 # 	],
-# }
+}
 
 # Testing
 # -------

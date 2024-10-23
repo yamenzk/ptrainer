@@ -6,7 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "membership",
+  "package",
   "client",
   "column_break_cqjp",
   "start",
@@ -14,14 +14,6 @@
   "active"
  ],
  "fields": [
-  {
-   "fieldname": "membership",
-   "fieldtype": "Link",
-   "in_preview": 1,
-   "label": "Package",
-   "link_filters": "[[\"PT Package\",\"enabled\",\"=\",1]]",
-   "options": "PT Package"
-  },
   {
    "fieldname": "client",
    "fieldtype": "Link",
@@ -38,25 +30,36 @@
    "fieldname": "start",
    "fieldtype": "Datetime",
    "in_preview": 1,
-   "label": "Start"
+   "label": "Start",
+   "read_only": 1
   },
   {
    "fieldname": "end",
    "fieldtype": "Datetime",
    "in_preview": 1,
-   "label": "End"
+   "label": "End",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "active",
    "fieldtype": "Check",
    "in_preview": 1,
-   "label": "Active"
+   "label": "Active",
+   "read_only": 1
+  },
+  {
+   "fieldname": "package",
+   "fieldtype": "Link",
+   "in_preview": 1,
+   "label": "Package",
+   "link_filters": "[[\"PT Package\",\"enabled\",\"=\",1]]",
+   "options": "PT Package"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-23 02:59:59.319664",
+ "modified": "2024-10-23 19:30:55.160545",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Membership",
