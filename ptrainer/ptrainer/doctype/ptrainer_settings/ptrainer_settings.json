@@ -6,6 +6,12 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "food_tab",
+  "usda_fdc_key",
+  "column_break_enjm",
+  "auto_image",
+  "unsplash_key",
+  "targets_tab",
   "column_break_oomh",
   "default_height",
   "default_weight",
@@ -370,13 +376,45 @@
    "fieldname": "water_bonus_extra_active",
    "fieldtype": "Int",
    "label": "Water Bonus Extra Active"
+  },
+  {
+   "fieldname": "food_tab",
+   "fieldtype": "Tab Break",
+   "label": "Food"
+  },
+  {
+   "fieldname": "usda_fdc_key",
+   "fieldtype": "Data",
+   "label": "FDC API Key"
+  },
+  {
+   "fieldname": "column_break_enjm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.auto_image",
+   "fieldname": "unsplash_key",
+   "fieldtype": "Data",
+   "label": "Unsplash API Key",
+   "mandatory_depends_on": "eval:doc.auto_image"
+  },
+  {
+   "fieldname": "targets_tab",
+   "fieldtype": "Tab Break",
+   "label": "Targets"
+  },
+  {
+   "default": "0",
+   "fieldname": "auto_image",
+   "fieldtype": "Check",
+   "label": "Automatically Fetch Images"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-10-23 15:19:31.816247",
+ "modified": "2024-10-23 16:37:25.735329",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Ptrainer Settings",
@@ -389,6 +427,15 @@
    "print": 1,
    "read": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Coach",
    "share": 1,
    "write": 1
   }
