@@ -6,6 +6,11 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "exercise_tab",
+  "column_break_cdhy",
+  "column_break_orwd",
+  "fetch_premade_exercises",
+  "fetched",
   "food_tab",
   "fdc_api",
   "column_break_enjm",
@@ -17,6 +22,7 @@
   "default_weight",
   "default_gender",
   "default_goal",
+  "default_age",
   "column_break_aysa",
   "bmr_weight_multiplier",
   "bmr_height_multiplier",
@@ -408,13 +414,44 @@
    "fieldtype": "Data",
    "label": "Unsplash API Key",
    "mandatory_depends_on": "eval:doc.auto_image"
+  },
+  {
+   "fieldname": "exercise_tab",
+   "fieldtype": "Tab Break",
+   "label": "Exercise"
+  },
+  {
+   "fieldname": "column_break_cdhy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_orwd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fetch_premade_exercises",
+   "fieldtype": "Button",
+   "label": "Fetch Premade Exercises"
+  },
+  {
+   "default": "0",
+   "fieldname": "fetched",
+   "fieldtype": "Check",
+   "label": "Fetched",
+   "read_only": 1
+  },
+  {
+   "default": "30",
+   "fieldname": "default_age",
+   "fieldtype": "Int",
+   "label": "Default Age"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-10-23 16:47:31.532401",
+ "modified": "2024-10-23 18:45:16.095585",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Ptrainer Settings",

@@ -30,6 +30,7 @@ class Client(Document):
         height = self.height if self.height else settings.default_height or defaults[
             'height']
         weight = self.weight[-1].weight if self.weight else settings.default_weight or defaults['weight']
+        age = self.age if self.age else settings.default_age or defaults['age']
 
         # Get activity factor based on activity level
         activity_factors = {
@@ -50,12 +51,12 @@ class Client(Document):
         if gender == 'Male':
             bmr = (settings.bmr_weight_multiplier or 10) * weight + \
                   (settings.bmr_height_multiplier or 6.25) * height - \
-                  (settings.bmr_age_multiplier or 5) * self.age + \
+                  (settings.bmr_age_multiplier or 5) * age + \
                   (settings.bmr_male_constant or 5)
         else:  # Female
             bmr = (settings.bmr_weight_multiplier or 10) * weight + \
                   (settings.bmr_height_multiplier or 6.25) * height - \
-                  (settings.bmr_age_multiplier or 5) * self.age - \
+                  (settings.bmr_age_multiplier or 5) * age - \
                   (settings.bmr_female_constant or 161)
 
         # Calculate TDEE

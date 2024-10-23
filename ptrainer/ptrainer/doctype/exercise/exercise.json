@@ -1,12 +1,13 @@
 {
  "actions": [],
  "allow_copy": 1,
- "autoname": "autoincrement",
+ "allow_rename": 1,
+ "autoname": "field:exercise",
  "creation": "2024-10-23 02:51:04.176369",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "title",
+  "exercise",
   "category",
   "equipment",
   "force",
@@ -24,12 +25,6 @@
   "instructions"
  ],
  "fields": [
-  {
-   "fieldname": "title",
-   "fieldtype": "Data",
-   "in_preview": 1,
-   "label": "Title"
-  },
   {
    "fieldname": "category",
    "fieldtype": "Autocomplete",
@@ -114,6 +109,13 @@
    "fieldname": "enabled",
    "fieldtype": "Check",
    "label": "Enabled"
+  },
+  {
+   "fieldname": "exercise",
+   "fieldtype": "Data",
+   "in_preview": 1,
+   "label": "Exercise",
+   "unique": 1
   }
  ],
  "hide_toolbar": 1,
@@ -121,11 +123,11 @@
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2024-10-23 03:02:30.302547",
+ "modified": "2024-10-23 17:54:11.856719",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Exercise",
- "naming_rule": "Autoincrement",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -153,9 +155,7 @@
   }
  ],
  "show_preview_popup": 1,
- "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": [],
- "title_field": "title"
+ "states": []
 }
