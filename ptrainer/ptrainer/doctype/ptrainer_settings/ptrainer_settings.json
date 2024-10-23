@@ -8,6 +8,7 @@
  "field_order": [
   "exercise_tab",
   "column_break_cdhy",
+  "column_break_ezec",
   "column_break_orwd",
   "fetch_premade_exercises",
   "fetched",
@@ -429,6 +430,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval:!doc.fetched",
    "fieldname": "fetch_premade_exercises",
    "fieldtype": "Button",
    "label": "Fetch Premade Exercises"
@@ -445,13 +447,17 @@
    "fieldname": "default_age",
    "fieldtype": "Int",
    "label": "Default Age"
+  },
+  {
+   "fieldname": "column_break_ezec",
+   "fieldtype": "Column Break"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-10-23 18:45:16.095585",
+ "modified": "2024-10-23 19:27:23.713321",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Ptrainer Settings",
