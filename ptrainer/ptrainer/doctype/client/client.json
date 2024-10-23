@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_copy": 1,
- "autoname": "autoincrement",
+ "autoname": "hash",
  "creation": "2024-10-23 02:11:27.282939",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -23,28 +23,28 @@
   "preferences_tab",
   "allow_preference_update",
   "column_break_avdn",
-  "meals",
-  "column_break_vtgt",
-  "workouts",
-  "column_break_xpjj",
   "goal",
   "target_weight",
-  "column_break_uwwv",
+  "column_break_vtgt",
+  "meals",
+  "workouts",
+  "column_break_xpjj",
   "equipment",
+  "activity_level",
   "bmr_tab",
   "height",
   "weight",
   "request_weight",
-  "column_break_fmzc",
-  "adjust",
+  "adjust_factor",
   "factor",
-  "last_update",
   "column_break_ljst",
+  "adjust",
   "target_proteins",
   "target_carbs",
   "target_fats",
   "target_energy",
-  "target_water"
+  "target_water",
+  "last_update"
  ],
  "fields": [
   {
@@ -66,9 +66,8 @@
   },
   {
    "fieldname": "age",
-   "fieldtype": "Data",
+   "fieldtype": "Read Only",
    "in_preview": 1,
-   "is_virtual": 1,
    "label": "Age",
    "read_only": 1
   },
@@ -90,7 +89,8 @@
   {
    "fieldname": "gender",
    "fieldtype": "Select",
-   "label": "Gender"
+   "label": "Gender",
+   "options": "\nMale\nFemale"
   },
   {
    "fieldname": "column_break_nwph",
@@ -118,20 +118,18 @@
    "label": "Preferences"
   },
   {
-   "description": "per day",
    "fieldname": "meals",
    "fieldtype": "Int",
-   "label": "Meals"
+   "label": "Meals (Per Day)"
   },
   {
    "fieldname": "column_break_vtgt",
    "fieldtype": "Column Break"
   },
   {
-   "description": "per week",
    "fieldname": "workouts",
    "fieldtype": "Int",
-   "label": "Workouts"
+   "label": "Workouts (Per Week)"
   },
   {
    "fieldname": "column_break_xpjj",
@@ -147,12 +145,8 @@
   {
    "fieldname": "target_weight",
    "fieldtype": "Float",
-   "label": "Target Weight",
+   "label": "Target Weight (kg)",
    "precision": "1"
-  },
-  {
-   "fieldname": "column_break_uwwv",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "equipment",
@@ -173,22 +167,20 @@
    "precision": "1"
   },
   {
-   "fieldname": "column_break_fmzc",
-   "fieldtype": "Column Break"
-  },
-  {
    "default": "0",
    "fieldname": "adjust",
    "fieldtype": "Check",
-   "label": "Adjust"
+   "label": "Manual"
   },
   {
    "default": "1",
+   "depends_on": "eval:doc.adjust_factor",
    "fieldname": "factor",
    "fieldtype": "Float",
    "label": "Factor",
    "non_negative": 1,
-   "precision": "2"
+   "precision": "2",
+   "read_only_depends_on": "eval:!doc.adjust_factor"
   },
   {
    "fieldname": "last_update",
@@ -263,17 +255,29 @@
    "fieldtype": "Link",
    "label": "Referred By",
    "options": "Client"
+  },
+  {
+   "fieldname": "activity_level",
+   "fieldtype": "Select",
+   "label": "Activity Level",
+   "options": "\nSedentary\nLight\nModerate\nVery Active\nExtra Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "adjust_factor",
+   "fieldtype": "Check",
+   "label": "Adjust Factor"
   }
  ],
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2024-10-23 02:40:54.054166",
+ "modified": "2024-10-23 16:31:16.605682",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Client",
- "naming_rule": "Autoincrement",
+ "naming_rule": "Random",
  "owner": "Administrator",
  "permissions": [
   {

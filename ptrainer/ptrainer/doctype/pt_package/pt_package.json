@@ -60,18 +60,21 @@
    "default": "0",
    "fieldname": "workout_plan",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Workout Plan"
   },
   {
    "default": "0",
    "fieldname": "meal_plan",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Meal Plan"
   },
   {
    "default": "0",
    "fieldname": "consultation",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Consultation"
   },
   {
@@ -85,7 +88,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-23 02:34:20.187487",
+ "modified": "2024-10-23 13:31:27.040350",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "PT Package",
