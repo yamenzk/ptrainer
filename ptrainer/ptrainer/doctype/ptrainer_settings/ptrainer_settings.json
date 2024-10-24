@@ -17,6 +17,9 @@
   "column_break_enjm",
   "auto_image",
   "unsplash_api",
+  "column_break_qdrr",
+  "fetch_premade_foods",
+  "food_fetched",
   "targets_tab",
   "column_break_oomh",
   "default_height",
@@ -451,13 +454,30 @@
   {
    "fieldname": "column_break_ezec",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qdrr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:!doc.food_fetched",
+   "fieldname": "fetch_premade_foods",
+   "fieldtype": "Button",
+   "label": "Fetch Premade Foods"
+  },
+  {
+   "default": "0",
+   "fieldname": "food_fetched",
+   "fieldtype": "Check",
+   "label": "Fetched",
+   "read_only": 1
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-10-23 19:27:23.713321",
+ "modified": "2024-10-24 03:39:09.403271",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Ptrainer Settings",

@@ -80,3 +80,54 @@ class PtrainerSettings(Document):
         except Exception as e:
             frappe.log_error(str(e), "Exercise Import Error")
             frappe.throw(_("Error importing exercises: {0}").format(str(e)))
+    
+    @frappe.whitelist()
+    def fetch_premade_foods(self):
+        try:
+            # Get the absolute path to the file in your app's public folder
+            file_path = frappe.get_app_path('ptrainer', 'public', 'records', 'foods.csv')
+            
+            # Check if file exists
+            if not os.path.exists(file_path):
+                frappe.throw(_("File not found: {0}").format(file_path))
+
+            # Read the file content
+            with open(file_path, 'r') as f:
+                csv_content = f.read()
+            
+            # Check if csv_content is empty
+            if not csv_content:
+                frappe.throw(_("The file is empty or could not be read."))
+
+            # Parse the CSV content
+            csv_reader = csv.DictReader(csv_content.splitlines())
+            
+            food_count = 0
+            for row in csv_reader:
+
+                # Check if the exercise already exists based on the 'Exercise' field
+                existing_food = frappe.db.get_value("Food", {"fdcid": row['fdcid']})
+                
+                if existing_food:
+                    # Update the existing exercise if it already exists
+                    food_doc = frappe.get_doc("Food", existing_food)
+                else:
+                    # Create a new exercise document
+                    food_doc = frappe.new_doc("Food")
+
+                # Set or update the exercise fields
+                food_doc.fdcid = row['fdcid']
+                food_doc.image = row['image']
+
+                # Insert or update the exercise in the database
+                food_doc.save()
+                frappe.db.commit()
+                food_count += 1
+
+            frappe.msgprint(_(f"Successfully imported/updated {food_count} foods."))
+            self.food_fetched = 1
+            self.save()
+        
+        except Exception as e:
+            frappe.log_error(str(e), "Food Import Error")
+            frappe.throw(_("Error importing foods: {0}").format(str(e)))

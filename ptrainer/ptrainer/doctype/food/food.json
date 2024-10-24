@@ -96,9 +96,10 @@
   }
  ],
  "hide_toolbar": 1,
+ "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-23 17:42:30.590904",
+ "modified": "2024-10-24 04:08:12.412281",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Food",

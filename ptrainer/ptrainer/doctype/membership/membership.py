@@ -7,7 +7,7 @@ from frappe.utils import now_datetime, add_to_date, get_datetime
 
 class Membership(Document):
     def validate(self):
-        if self.has_value_changed('pt_package'):
+        if self.has_value_changed('package'):
             self.set_membership_dates()
         
         self.set_active_status()
@@ -15,7 +15,7 @@ class Membership(Document):
     def set_membership_dates(self):
         if self.package:
             # Get the package duration in seconds
-            package_duration = frappe.db.get_value('PT Package', self.pt_package, 'duration')
+            package_duration = frappe.db.get_value('PT Package', self.package, 'duration')
             
             if package_duration:
                 if not self.start:

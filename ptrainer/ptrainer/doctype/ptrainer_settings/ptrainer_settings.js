@@ -12,5 +12,16 @@ frappe.ui.form.on('Ptrainer Settings', {
                 frm.reload_doc();
             }
         });
+    },
+    fetch_premade_foods: function(frm) {
+        frm.call({
+            doc: frm.doc,
+            method: 'fetch_premade_foods',
+            freeze: true,
+            freeze_message: __('Importing foods... Please wait'),
+            callback: function(r) {
+                frm.reload_doc();
+            }
+        });
     }
 });

@@ -49,7 +49,7 @@ class Food(Document):
                                     f"Incomplete nutrient data: {nutrient}", "Nutrient Error")
 
                     # Fetch an image from Unsplash if auto_image is enabled
-                    if auto_image and unsplash_api:
+                    if auto_image and unsplash_api and not self.image:
                         image_url = self.fetch_unsplash_image(self.title, unsplash_api)
                         if image_url:
                             self.image = image_url

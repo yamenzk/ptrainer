@@ -1,16 +1,18 @@
 {
  "actions": [],
  "allow_copy": 1,
- "autoname": "format:{client}{start}{end}",
+ "autoname": "field:title",
  "creation": "2024-10-23 03:19:36.429156",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "client",
   "membership",
+  "blocked_foods",
   "column_break_navm",
   "start",
   "end",
+  "title",
   "column_break_paoq",
   "target_proteins",
   "target_carbs",
@@ -81,8 +83,10 @@
    "in_list_view": 1,
    "label": "Client",
    "link_filters": "[[\"Client\",\"enabled\",\"=\",1]]",
+   "no_copy": 1,
    "options": "Client",
-   "reqd": 1
+   "reqd": 1,
+   "set_only_once": 1
   },
   {
    "fieldname": "membership",
@@ -91,6 +95,7 @@
    "label": "Membership",
    "link_filters": "[[\"Membership\",\"active\",\"=\",1]]",
    "options": "Membership",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -101,15 +106,18 @@
    "fieldname": "start",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Start"
+   "label": "Start",
+   "read_only": 1
   },
   {
    "fieldname": "end",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "End"
+   "label": "End",
+   "read_only": 1
   },
   {
+   "depends_on": "eval:doc.membership",
    "fieldname": "day_1_tab",
    "fieldtype": "Tab Break",
    "label": "Day 1"
@@ -131,12 +139,14 @@
    "label": "Rest"
   },
   {
+   "depends_on": "eval:!doc.d1_rest",
    "fieldname": "d1_e",
    "fieldtype": "Table",
    "label": "Day 1 Exercises",
    "options": "Exercises"
   },
   {
+   "depends_on": "eval:!doc.d1_rest",
    "fieldname": "d1_template",
    "fieldtype": "Link",
    "label": "Template",
@@ -144,6 +154,7 @@
    "options": "Exercise Template"
   },
   {
+   "depends_on": "eval:doc.membership",
    "fieldname": "day_2_tab",
    "fieldtype": "Tab Break",
    "label": "Day 2"
@@ -165,6 +176,7 @@
    "label": "Rest"
   },
   {
+   "depends_on": "eval:!doc.d2_rest",
    "fieldname": "d2_template",
    "fieldtype": "Link",
    "label": "Template",
@@ -234,6 +246,7 @@
    "label": "Daily Meals"
   },
   {
+   "depends_on": "eval:doc.membership",
    "fieldname": "day_3_tab",
    "fieldtype": "Tab Break",
    "label": "Day 3"
@@ -255,6 +268,7 @@
    "label": "Rest"
   },
   {
+   "depends_on": "eval:!doc.d3_rest",
    "fieldname": "d3_template",
    "fieldtype": "Link",
    "label": "Template",
@@ -262,36 +276,42 @@
    "options": "Exercise Template"
   },
   {
+   "depends_on": "eval:!doc.d1_cheat",
    "fieldname": "d1_f",
    "fieldtype": "Table",
    "label": "Day 1 Foods",
    "options": "Foods"
   },
   {
+   "depends_on": "eval:!doc.d2_cheat",
    "fieldname": "d2_f",
    "fieldtype": "Table",
    "label": "Day 2 Foods",
    "options": "Foods"
   },
   {
+   "depends_on": "eval:!doc.d2_rest",
    "fieldname": "d2_e",
    "fieldtype": "Table",
    "label": "Day 2 Exercises",
    "options": "Exercises"
   },
   {
+   "depends_on": "eval:!doc.d3_cheat",
    "fieldname": "d3_f",
    "fieldtype": "Table",
    "label": "Day 3 Foods",
    "options": "Foods"
   },
   {
+   "depends_on": "eval:!doc.d3_rest",
    "fieldname": "d3_e",
    "fieldtype": "Table",
    "label": "Day 3 Exercises",
    "options": "Exercises"
   },
   {
+   "depends_on": "eval:doc.membership",
    "fieldname": "day_4_tab",
    "fieldtype": "Tab Break",
    "label": "Day 4"
@@ -303,6 +323,7 @@
    "label": "Cheat"
   },
   {
+   "depends_on": "eval:!doc.d4_cheat",
    "fieldname": "d4_f",
    "fieldtype": "Table",
    "label": "Day 4 Foods",
@@ -319,6 +340,7 @@
    "label": "Rest"
   },
   {
+   "depends_on": "eval:!doc.d4_rest",
    "fieldname": "d4_template",
    "fieldtype": "Link",
    "label": "Template",
@@ -326,12 +348,14 @@
    "options": "Exercise Template"
   },
   {
+   "depends_on": "eval:!doc.d4_rest",
    "fieldname": "d4_e",
    "fieldtype": "Table",
    "label": "Day 4 Exercises",
    "options": "Exercises"
   },
   {
+   "depends_on": "eval:doc.membership",
    "fieldname": "day_5_tab",
    "fieldtype": "Tab Break",
    "label": "Day 5"
@@ -343,6 +367,7 @@
    "label": "Cheat"
   },
   {
+   "depends_on": "eval:!doc.d5_cheat",
    "fieldname": "d5_f",
    "fieldtype": "Table",
    "label": "Day 5 Foods",
@@ -359,6 +384,7 @@
    "label": "Rest"
   },
   {
+   "depends_on": "eval:!doc.d5_rest",
    "fieldname": "d5_template",
    "fieldtype": "Link",
    "label": "Template",
@@ -366,12 +392,14 @@
    "options": "Exercise Template"
   },
   {
+   "depends_on": "eval:!doc.d5_rest",
    "fieldname": "d5_e",
    "fieldtype": "Table",
    "label": "Day 5 Exercises",
    "options": "Exercises"
   },
   {
+   "depends_on": "eval:doc.membership",
    "fieldname": "day_6_tab",
    "fieldtype": "Tab Break",
    "label": "Day 6"
@@ -383,6 +411,7 @@
    "label": "Cheat "
   },
   {
+   "depends_on": "eval:!doc.d6_cheat",
    "fieldname": "d6_f",
    "fieldtype": "Table",
    "label": "Day 6 Foods",
@@ -399,6 +428,7 @@
    "label": "Rest"
   },
   {
+   "depends_on": "eval:!doc.d6_rest",
    "fieldname": "d6_template",
    "fieldtype": "Link",
    "label": "Template",
@@ -406,12 +436,14 @@
    "options": "Exercise Template"
   },
   {
+   "depends_on": "eval:!doc.d6_rest",
    "fieldname": "d6_e",
    "fieldtype": "Table",
    "label": "Day 6 Exercises",
    "options": "Exercises"
   },
   {
+   "depends_on": "eval:doc.membership",
    "fieldname": "day_7_tab",
    "fieldtype": "Tab Break",
    "label": "Day 7"
@@ -423,6 +455,7 @@
    "label": "Cheat"
   },
   {
+   "depends_on": "eval:!doc.d7_cheat",
    "fieldname": "d7_f",
    "fieldtype": "Table",
    "label": "Day 7 Foods",
@@ -439,6 +472,7 @@
    "label": "Rest"
   },
   {
+   "depends_on": "eval:!doc.d7_rest",
    "fieldname": "d7_template",
    "fieldtype": "Link",
    "label": "Template",
@@ -446,6 +480,7 @@
    "options": "Exercise Template"
   },
   {
+   "depends_on": "eval:!doc.d7_rest",
    "fieldname": "d7_e",
    "fieldtype": "Table",
    "label": "Day 7 Exercises",
@@ -459,17 +494,33 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Draft\nScheduled\nActive\nCompleted"
+   "options": "\nScheduled\nActive\nCompleted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Title",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fetch_from": "client.blocked_foods",
+   "fieldname": "blocked_foods",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Blocked Foods"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-23 13:28:53.358164",
+ "modified": "2024-10-24 04:39:06.966311",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Plan",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
