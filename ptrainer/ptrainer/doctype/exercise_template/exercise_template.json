@@ -8,8 +8,9 @@
  "engine": "InnoDB",
  "field_order": [
   "title",
-  "enabled",
   "column_break_kvpw",
+  "enabled",
+  "section_break_skjw",
   "exercises",
   "filters_section",
   "primary_muscle",
@@ -21,6 +22,7 @@
   "force",
   "mechanic",
   "column_break_lovb",
+  "html_vveb",
   "clear_filters"
  ],
  "fields": [
@@ -49,7 +51,7 @@
    "fieldname": "primary_muscle",
    "fieldtype": "Autocomplete",
    "label": "Primary Muscle",
-   "options": "\nAbductors\nNeck\nForearms\nTraps\nTriceps\nLats\nLower Back\nGlutes\nCalves\nMiddle Back\nCheck\nShoulders\nBiceps\nQuadriceps\nAdductors\nHamstrings\nAbdominals"
+   "options": "\nAbductors\nNeck\nForearms\nTraps\nTriceps\nLats\nLower Back\nGlutes\nCalves\nMiddle Back\nChest\nShoulders\nBiceps\nQuadriceps\nAdductors\nHamstrings\nAbdominals"
   },
   {
    "fieldname": "level",
@@ -99,16 +101,25 @@
    "label": "Clear Filters"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "enabled",
    "fieldtype": "Check",
    "label": "Enabled"
+  },
+  {
+   "fieldname": "html_vveb",
+   "fieldtype": "HTML",
+   "options": "<div style=\"height:100px;\"></div>"
+  },
+  {
+   "fieldname": "section_break_skjw",
+   "fieldtype": "Section Break"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-23 03:18:06.764661",
+ "modified": "2024-10-25 00:52:36.751149",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Exercise Template",
