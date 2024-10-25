@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
 from typing import Dict, List, Optional, Any, TypedDict, Tuple, Set
-from dataclasses import dataclass
-from datetime import datetime, timedelta
+# from dataclasses import dataclass
+# from datetime import datetime, timedelta
 import hashlib
-import json
+# import json
 import frappe
 from ptrainer.config.nutrition import get_nutrient_mappings
 
@@ -169,6 +169,7 @@ def calculate_nutrition_for_amount(base_nutrition: Dict[str, NutritionFact], amo
         for nutrient, facts in base_nutrition.items()
     }
 
+
 def process_exercise_data(exercise_doc: Any) -> Dict[str, Any]:
     """Process exercise data for reference"""
     return {
@@ -228,22 +229,41 @@ def process_food_instance(food_item: Any, food_reference_data: Dict[str, Any]) -
         'nutrition': nutrition
     }
 
-def process_exercise_instance(exercise_item: Any) -> Dict[str, Any]:
-    """Process exercise instance data"""
+def process_exercise_performance(performance_docs: List[Any]) -> Dict[str, List[Dict[str, Any]]]:
+    """Process exercise performance data into a dictionary"""
+    performance_data = {}
+    
+    for doc in performance_docs:
+        entry = {
+            'weight': doc.weight,
+            'reps': doc.reps,
+            'date': doc.date
+        }
+        
+        if doc.exercise not in performance_data:
+            performance_data[doc.exercise] = []
+        
+        performance_data[doc.exercise].append(entry)
+    
+    return performance_data
+
+def process_exercise_instance(exercise_item: Any, performance_data: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Any]:
+    """Process exercise instance data with performance references"""
     return {
         'ref': exercise_item.exercise,
         'sets': exercise_item.sets,
         'reps': exercise_item.reps,
-        'rest': exercise_item.rest
+        'rest': exercise_item.rest,
+        'performance': performance_data.get(exercise_item.exercise, [])
     }
 
-def process_day_exercises(exercises: List[Any]) -> List[Dict[str, Any]]:
-    """Process exercises for a day with supersets handling"""
+def process_day_exercises(exercises: List[Any], performance_data: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    """Process exercises for a day with supersets handling and performance data"""
     processed_exercises = []
     current_superset = []
 
     for exercise in exercises:
-        exercise_data = process_exercise_instance(exercise)
+        exercise_data = process_exercise_instance(exercise, performance_data)
         
         if exercise.super == 1:
             current_superset.append(exercise_data)
@@ -305,9 +325,10 @@ def process_plan_day(
     plan_doc: Any,
     day: int,
     food_references: Dict[str, Any],
-    exercise_references: Dict[str, Any]
+    exercise_references: Dict[str, Any],
+    performance_data: Dict[str, List[Dict[str, Any]]]
 ) -> Dict[str, Any]:
-    """Process a single day of a plan efficiently"""
+    """Process a single day of a plan efficiently with performance data"""
     day_exercises = plan_doc.get(f"d{day}_e", [])
     day_foods = plan_doc.get(f"d{day}_f", [])
 
@@ -317,14 +338,14 @@ def process_plan_day(
     ]
 
     return {
-        'exercises': process_day_exercises(day_exercises),
+        'exercises': process_day_exercises(day_exercises, performance_data),
         'foods': processed_foods,
         'totals': calculate_daily_totals(processed_foods)
     }
 
 def process_plans_batch(plan_docs: List[Any]) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
     """Process multiple plans efficiently in batch"""
-    reference_data = {'exercises': {}, 'foods': {}}
+    reference_data = {'exercises': {}, 'foods': {}, 'performance': {}}
     processed_plans = []
     
     # Collect unique items efficiently
@@ -349,6 +370,21 @@ def process_plans_batch(plan_docs: List[Any]) -> Tuple[Dict[str, Any], List[Dict
     for food_id in all_foods:
         reference_data['foods'][food_id] = process_food_reference_data_cached(food_id)
 
+    # Process exercise performance data
+    performance_docs = frappe.get_all(
+        "Performance Log",
+        filters={"exercise": ["in", list(all_exercises)]},
+        fields=["exercise", "weight", "reps", "date"]
+    )
+    for doc in performance_docs:
+        if doc.exercise not in reference_data['performance']:
+            reference_data['performance'][doc.exercise] = []
+        reference_data['performance'][doc.exercise].append({
+            'weight': doc.weight,
+            'reps': doc.reps,
+            'date': doc.date
+        })
+
     # Process plans efficiently
     for plan_doc in plan_docs:
         plan_data = process_plan_data(plan_doc)
@@ -357,7 +393,8 @@ def process_plans_batch(plan_docs: List[Any]) -> Tuple[Dict[str, Any], List[Dict
                 plan_doc, 
                 day, 
                 reference_data['foods'],
-                reference_data['exercises']
+                reference_data['exercises'],
+                reference_data['performance']
             )
             for day in range(1, 8)
         }
@@ -365,7 +402,7 @@ def process_plans_batch(plan_docs: List[Any]) -> Tuple[Dict[str, Any], List[Dict
 
     return reference_data, processed_plans
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_membership(membership: str) -> Dict[str, Any]:
     """Get comprehensive membership information with optimized data structure"""
     try:
@@ -374,7 +411,7 @@ def get_membership(membership: str) -> Dict[str, Any]:
         # Try to get cached membership data
         cached_data = cache.get_cached_membership_data(membership)
         if cached_data:
-            return {'data': cached_data}
+            return cached_data
 
         # Fetch and validate core documents
         membership_doc = frappe.get_doc("Membership", membership)
@@ -407,7 +444,7 @@ def get_membership(membership: str) -> Dict[str, Any]:
                 'active': membership_doc.active,
             },
             'client': {
-                **client_doc.as_dict(),
+                **{k: v for k, v in client_doc.as_dict().items() if k != 'exercise_performance'},
                 'current_weight': client_doc.weight[-1].weight if client_doc.weight else None,
                 'weight': [{'weight': w.weight, 'date': w.date} for w in client_doc.weight]
             },
@@ -418,7 +455,7 @@ def get_membership(membership: str) -> Dict[str, Any]:
         # Cache the response
         cache.set_cached_membership_data(membership, response_data)
         
-        return {'data': response_data}
+        return response_data
     except Exception as e:
         frappe.log_error(f"Error in get_membership: {str(e)}")
         return {"message": f"An error occurred: {str(e)}"}
