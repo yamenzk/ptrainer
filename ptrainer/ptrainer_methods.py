@@ -206,8 +206,8 @@ def process_food_reference_data_cached(food_id: str) -> Dict[str, Any]:
     cache = MembershipCache()
     
     cached_data = cache.get_cached_library_item("Food", food_id)
-    # if cached_data:
-    #     return cached_data
+    if cached_data:
+        return cached_data
 
     food_doc = frappe.get_doc("Food", food_id)
     base_nutrition = extract_base_nutrition(food_doc, get_nutrient_mappings())
@@ -218,7 +218,7 @@ def process_food_reference_data_cached(food_id: str) -> Dict[str, Any]:
         'description': food_doc.description
     }
     if base_nutrition:
-        processed_data['nutrition_per_1001g'] = base_nutrition
+        processed_data['nutrition_per_100g'] = base_nutrition
     cache.set_cached_library_item("Food", food_id, processed_data)
     
     return processed_data
