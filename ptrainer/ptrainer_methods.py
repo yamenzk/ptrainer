@@ -254,7 +254,6 @@ def process_exercise_instance(exercise_item: Any, performance_data: Dict[str, Li
         'sets': exercise_item.sets,
         'reps': exercise_item.reps,
         'rest': exercise_item.rest,
-        'performance': performance_data.get(exercise_item.exercise, [])
     }
 
 def process_day_exercises(exercises: List[Any], performance_data: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
