@@ -1,4 +1,5 @@
 from .ptrainer_methods import MembershipCache
+import frappe
 
 def on_plan_update(doc, method):
     """Handle plan updates"""
