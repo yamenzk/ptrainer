@@ -137,13 +137,33 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "Plan": {
+        "on_update": "ptrainer.handlers.on_plan_update",
+        "on_submit": "ptrainer.handlers.on_plan_update",
+        "after_insert": "ptrainer.handlers.on_plan_update",
+        "on_cancel": "ptrainer.handlers.on_plan_update",
+        "on_trash": "ptrainer.handlers.on_plan_update"
+    },
+    "Membership": {
+        "on_update": "ptrainer.handlers.on_membership_update",
+        "on_submit": "ptrainer.handlers.on_membership_update",
+        "on_cancel": "ptrainer.handlers.on_membership_update",
+        "on_trash": "ptrainer.handlers.on_membership_update"
+    },
+    "Client": {
+        "on_update": "ptrainer.handlers.on_client_update",
+        "after_insert": "ptrainer.handlers.on_client_update",
+        "on_trash": "ptrainer.handlers.on_client_update"
+    },
+    # Library items with less frequent updates
+    "Exercise": {
+        "on_update": "ptrainer.handlers.on_exercise_update"
+    },
+    "Food": {
+        "on_update": "ptrainer.handlers.on_food_update"
+    }
+}
 
 # Scheduled Tasks
 # ---------------

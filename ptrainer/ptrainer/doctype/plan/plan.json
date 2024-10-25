@@ -9,6 +9,7 @@
   "client",
   "membership",
   "blocked_foods",
+  "__food_hash",
   "column_break_navm",
   "start",
   "end",
@@ -560,12 +561,19 @@
    "fieldtype": "Small Text",
    "label": "Macro Summary",
    "read_only": 1
+  },
+  {
+   "fieldname": "__food_hash",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Food Hash",
+   "no_copy": 1
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-25 13:56:50.641690",
+ "modified": "2024-10-25 20:03:49.265111",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Plan",

@@ -8,6 +8,8 @@ from ptrainer.config.nutrition import get_nutrient_mappings
 import json
 
 class Plan(Document):
+    def before_save(self):
+        self.old_food_hash = self.get('__food_hash')
     def before_insert(self):
         # Fetch membership details
         membership = frappe.get_doc('Membership', self.membership)
@@ -76,7 +78,7 @@ class Plan(Document):
 @frappe.whitelist()
 def calculate_all_nutritional_totals(all_food_data):
     """
-    Calculate nutritional totals for plan doctype food tables
+    Calculate nutritional totals for plan doctype food tables based on macros
     Args:
         all_food_data (dict): Dictionary with table_ids (d1_f, d2_f, etc) as keys and list of food items as values
     Returns:
@@ -129,8 +131,15 @@ def calculate_all_nutritional_totals(all_food_data):
         nutrients = {}
         if food_doc.nutritional_facts:
             # Find values for each nutrient type using the mapping
-            for nutrient_type in ['energy', 'carbs', 'protein', 'fat']:
+            for nutrient_type in ['carbs', 'protein', 'fat']:
                 nutrients[nutrient_type] = find_nutrient_value(food_doc.nutritional_facts, nutrient_type)
+        
+        # Calculate energy based on macros
+        nutrients['energy'] = (
+            nutrients.get('carbs', 0) * 4 + 
+            nutrients.get('protein', 0) * 4 + 
+            nutrients.get('fat', 0) * 9
+        )
 
         food_nutrients[food_name] = nutrients
 
