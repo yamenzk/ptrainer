@@ -211,7 +211,18 @@ def process_food_reference_data_cached(food_id: str) -> Dict[str, Any]:
 
     food_doc = frappe.get_doc("Food", food_id)
     base_nutrition = extract_base_nutrition(food_doc, get_nutrient_mappings())
-    processed_data = {'nutrition_per_100g': base_nutrition} if base_nutrition else {}
+    processed_data = {
+        'nutrition_per_100g': base_nutrition,
+        'title': food_doc.title,
+        'image': food_doc.image,
+        'category': food_doc.category,
+        'description': food_doc.description
+    } if base_nutrition else {
+        'title': food_doc.title,
+        'image': food_doc.image,
+        'category': food_doc.category,
+        'description': food_doc.description
+    }
     cache.set_cached_library_item("Food", food_id, processed_data)
     
     return processed_data
@@ -254,7 +265,6 @@ def process_exercise_instance(exercise_item: Any, performance_data: Dict[str, Li
         'sets': exercise_item.sets,
         'reps': exercise_item.reps,
         'rest': exercise_item.rest,
-        'performance': performance_data.get(exercise_item.exercise, [])
     }
 
 def process_day_exercises(exercises: List[Any], performance_data: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
