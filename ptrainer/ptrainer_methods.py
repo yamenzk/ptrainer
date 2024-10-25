@@ -212,17 +212,13 @@ def process_food_reference_data_cached(food_id: str) -> Dict[str, Any]:
     food_doc = frappe.get_doc("Food", food_id)
     base_nutrition = extract_base_nutrition(food_doc, get_nutrient_mappings())
     processed_data = {
-        'nutrition_per_100g': base_nutrition,
-        'title': food_doc.title,
-        'image': food_doc.image,
-        'category': food_doc.category,
-        'description': food_doc.description
-    } if base_nutrition else {
         'title': food_doc.title,
         'image': food_doc.image,
         'category': food_doc.category,
         'description': food_doc.description
     }
+    if base_nutrition:
+        processed_data['nutrition_per_100g'] = base_nutrition
     cache.set_cached_library_item("Food", food_id, processed_data)
     
     return processed_data
