@@ -444,7 +444,7 @@ def get_membership(membership: str) -> Dict[str, Any]:
                 'active': membership_doc.active,
             },
             'client': {
-                **{k: v for k, v in client_doc.as_dict().items() if k != 'exercise_performance'},
+                **{k: v for k, v in client_doc.as_dict().items() if k not in {'exercise_performance', 'target_proteins', 'target_carbs', 'target_fats', 'target_energy', 'target_water'}},
                 'current_weight': client_doc.weight[-1].weight if client_doc.weight else None,
                 'weight': [{'weight': w.weight, 'date': w.date} for w in client_doc.weight]
             },
