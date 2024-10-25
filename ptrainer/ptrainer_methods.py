@@ -218,7 +218,7 @@ def process_food_reference_data_cached(food_id: str) -> Dict[str, Any]:
         'description': food_doc.description
     }
     if base_nutrition:
-        processed_data['nutrition_per_1001g'] = base_nutrition
+        processed_data['nutrition_per_100g'] = base_nutrition
     cache.set_cached_library_item("Food", food_id, processed_data)
     
     return processed_data
