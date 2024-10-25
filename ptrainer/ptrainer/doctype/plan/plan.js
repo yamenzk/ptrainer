@@ -95,22 +95,115 @@ frappe.ui.form.on('Plan', {
     },
     onload: function(frm) {
         // Array of field names that need the food filter
-        const fieldNames = ['d1_f', 'd2_f', 'd3_f', 'd4_f', 'd5_f', 'd6_f'];
+        const fieldNames = ['d1_f', 'd2_f', 'd3_f', 'd4_f', 'd5_f', 'd6_f', 'd7_f'];
         
         // Apply the filter to each field
         fieldNames.forEach(fieldName => {
             frm.fields_dict[fieldName].grid.get_field('food').get_query = function(doc, cdt, cdn) {
                 return {
                     filters: [
-                        ['name', 'not in', get_blocked_foods(frm)]
+                        ['name', 'not in', get_blocked_foods(frm)],
+                        ['enabled', '=', 1]
                     ]
                 };
             };
         });
-    }
+    },
+    before_save: function(frm) {
+        // Collect all food data at once
+        const allFoodData = {};
+        const table_ids = ['d1_f', 'd2_f', 'd3_f', 'd4_f', 'd5_f', 'd6_f', 'd7_f'];
+        
+        table_ids.forEach(table_id => {
+            const food_data = frm.doc[table_id]
+                .filter(row => row.food && row.amount)
+                .map(row => ({
+                    food_docname: row.food,
+                    amount_in_grams: parseFloat(row.amount)
+                }));
+                
+            if (food_data.length > 0) {
+                allFoodData[table_id] = food_data;
+            }
+        });
+    
+        // Only make the server call if we have data
+        if (Object.keys(allFoodData).length > 0) {
+            frappe.call({
+                freeze: true,
+                freeze_message: __('Calculating...'),
+                method: 'ptrainer.ptrainer.doctype.plan.plan.calculate_all_nutritional_totals',  // Updated path
+                args: { all_food_data: allFoodData },
+                callback: function(r) {
+                    if (r.message) {
+                        Object.entries(r.message).forEach(([table_id, totals]) => {
+                            const summary = `Protein: ${Math.round(totals.protein)}g + Carbs: ${Math.round(totals.carbs)}g + Fat: ${Math.round(totals.fat)}g = ${Math.round(totals.energy)} kcal`;
+                            const stat_div_id = `${table_id}_macro`;
+                            frm.set_value(stat_div_id, summary);
+                        });
+                    }
+                }
+            });
+        }
+    },
+    d1_template: function(frm) {
+        populate_exercises(frm, 'd1_template', 'd1_e');
+    },
+    d2_template: function(frm) {
+        populate_exercises(frm, 'd2_template', 'd2_e');
+    }, 
+    d3_template: function(frm) {
+        populate_exercises(frm, 'd3_template', 'd3_e');
+    },
+    d4_template: function(frm) {
+        populate_exercises(frm, 'd4_template', 'd4_e');
+    },
+    d5_template: function(frm) {
+        populate_exercises(frm, 'd5_template', 'd5_e');
+    },
+    d6_template: function(frm) {
+        populate_exercises(frm, 'd6_template', 'd6_e');
+    },
+    d7_template: function(frm) {
+        populate_exercises(frm, 'd7_template', 'd7_e');
+    },
 });
 
 function get_blocked_foods(frm) {
     let blocked_foods = frm.doc.blocked_foods
     return blocked_foods ? blocked_foods.split(',').map(id => id.trim()) : [];
+}
+
+function populate_exercises(frm, template_field, exercise_table) {
+    if (frm.doc[template_field]) {
+        // Clear existing entries in exercise table
+        frm.doc[exercise_table] = [];
+        
+        // Fetch exercises from the template
+        frappe.call({
+            method: 'frappe.client.get',
+            args: {
+                doctype: 'Exercise Template',
+                name: frm.doc[template_field]
+            },
+            callback: function(response) {
+                if (response.message && response.message.exercises) {
+                    // Loop through exercises in template
+                    response.message.exercises.forEach(function(exercise) {
+                        // Add each exercise to exercise table
+                        let row = frm.add_child(exercise_table, {
+                            exercise: exercise.exercise,
+                            sets: exercise.sets,
+                            reps: exercise.reps,
+                            rest: exercise.rest,
+                            super: exercise.super
+                        });
+                    });
+                    
+                    // Refresh the child table
+                    frm.refresh_field(exercise_table);
+                }
+            }
+        });
+    }
 }

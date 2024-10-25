@@ -29,6 +29,7 @@
   "day_1_tab",
   "d1_cheat",
   "d1_f",
+  "d1_f_macro",
   "column_break_tlqe",
   "d1_rest",
   "d1_template",
@@ -36,6 +37,7 @@
   "day_2_tab",
   "d2_cheat",
   "d2_f",
+  "d2_f_macro",
   "column_break_tvrt",
   "d2_rest",
   "d2_template",
@@ -43,6 +45,7 @@
   "day_3_tab",
   "d3_cheat",
   "d3_f",
+  "d3_f_macro",
   "column_break_ovnl",
   "d3_rest",
   "d3_template",
@@ -50,6 +53,7 @@
   "day_4_tab",
   "d4_cheat",
   "d4_f",
+  "d4_f_macro",
   "column_break_fyza",
   "d4_rest",
   "d4_template",
@@ -57,6 +61,7 @@
   "day_5_tab",
   "d5_cheat",
   "d5_f",
+  "d5_f_macro",
   "column_break_ehhq",
   "d5_rest",
   "d5_template",
@@ -64,6 +69,7 @@
   "day_6_tab",
   "d6_cheat",
   "d6_f",
+  "d6_f_macro",
   "column_break_mimm",
   "d6_rest",
   "d6_template",
@@ -71,6 +77,7 @@
   "day_7_tab",
   "d7_cheat",
   "d7_f",
+  "d7_f_macro",
   "column_break_tbdl",
   "d7_rest",
   "d7_template",
@@ -511,12 +518,54 @@
    "fieldtype": "Small Text",
    "hidden": 1,
    "label": "Blocked Foods"
+  },
+  {
+   "fieldname": "d1_f_macro",
+   "fieldtype": "Small Text",
+   "label": "Macro Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "d2_f_macro",
+   "fieldtype": "Small Text",
+   "label": "Macro Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "d3_f_macro",
+   "fieldtype": "Small Text",
+   "label": "Macro Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "d4_f_macro",
+   "fieldtype": "Small Text",
+   "label": "Macro Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "d5_f_macro",
+   "fieldtype": "Small Text",
+   "label": "Macro Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "d6_f_macro",
+   "fieldtype": "Small Text",
+   "label": "Macro Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "d7_f_macro",
+   "fieldtype": "Small Text",
+   "label": "Macro Summary",
+   "read_only": 1
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-24 04:39:06.966311",
+ "modified": "2024-10-25 13:56:50.641690",
  "modified_by": "Administrator",
  "module": "Ptrainer",
  "name": "Plan",
