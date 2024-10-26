@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "allow_copy": 1,
+ "allow_rename": 1,
+ "creation": "2024-10-26 11:24:12.047813",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "datetime",
+  "type",
+  "response",
+  "column_break_yqwj",
+  "membership",
+  "small_text_wfpx"
+ ],
+ "fields": [
+  {
+   "fieldname": "datetime",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Datetime"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "\nMessage\nNotification"
+  },
+  {
+   "default": "0",
+   "fieldname": "response",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Response"
+  },
+  {
+   "fieldname": "column_break_yqwj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "membership",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Membership",
+   "options": "Membership"
+  },
+  {
+   "fieldname": "small_text_wfpx",
+   "fieldtype": "Small Text",
+   "in_list_view": 1
+  }
+ ],
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-10-26 11:33:40.286181",
+ "modified_by": "Administrator",
+ "module": "Ptrainer",
+ "name": "Chat",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Guest",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Coach",
+   "write": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Blue",
+   "title": "Message"
+  },
+  {
+   "color": "Purple",
+   "title": "Notification"
+  }
+ ]
+}

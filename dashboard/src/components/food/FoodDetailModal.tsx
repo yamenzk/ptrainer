@@ -123,7 +123,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute right-4 bg-purple-500 top-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10"
+            className="absolute right-4 bg-gray-700 top-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -179,19 +179,19 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
                   label="Protein"
                   value={Math.round(food.nutrition.protein.value)}
                   percentage={(food.nutrition.protein.value / totalMacros) * 100}
-                  color="#3B82F6"
+                  color="#ef4444"
                 />
                 <MacroCircle
                   label="Carbs"
                   value={Math.round(food.nutrition.carbs.value)}
                   percentage={(food.nutrition.carbs.value / totalMacros) * 100}
-                  color="#10B981"
+                  color="#22c55e"
                 />
                 <MacroCircle
                   label="Fats"
                   value={Math.round(food.nutrition.fat.value)}
                   percentage={(food.nutrition.fat.value / totalMacros) * 100}
-                  color="#F59E0B"
+                  color="#eab308"
                 />
               </div>
             </div>

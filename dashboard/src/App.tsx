@@ -1,11 +1,19 @@
 // src/App.tsx
-import { AppRouter } from './router';
 import { ThemeProvider } from './providers/ThemeProvider';
+import { WizardProvider } from './providers/WizardProvider';
+import { AuthProvider } from './components/auth/AuthProvider';
+import { AppRouter } from './router';
+import { Toaster } from 'sonner';
 
 function App() {
   return (
     <ThemeProvider>
-      <AppRouter />
+      <AuthProvider>
+        <WizardProvider>
+          <AppRouter />
+          <Toaster />
+        </WizardProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

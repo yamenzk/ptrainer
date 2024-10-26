@@ -9,6 +9,7 @@ interface StatCardProps {
   trend?: {
     value: number;
     isUpward: boolean;
+    isSuccess?: boolean;  // New prop to indicate if the trend aligns with the goal
   };
   color: 'blue' | 'purple' | 'green' | 'orange';
 }
@@ -29,6 +30,15 @@ export const StatCard: React.FC<StatCardProps> = ({
 }) => {
   const colorClasses = colorMap[color];
   
+  // Determine trend color based on success state or direction
+  const getTrendColor = () => {
+    if (!trend) return '';
+    if (trend.isSuccess !== undefined) {
+      return trend.isSuccess ? 'text-green-500' : 'text-red-500';
+    }
+    return trend.isUpward ? 'text-green-500' : 'text-red-500';
+  };
+  
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 animate-fade-in">
       <div className="flex items-center justify-between">
@@ -36,10 +46,8 @@ export const StatCard: React.FC<StatCardProps> = ({
           <Icon className="w-6 h-6" />
         </div>
         {trend && (
-          <div className={`flex items-center space-x-1 text-sm ${
-            trend.isUpward ? 'text-green-500' : 'text-red-500'
-          }`}>
-            <span>{Math.abs(trend.value)}%</span>
+          <div className={`flex items-center space-x-1 text-sm ${getTrendColor()}`}>
+            <span>{trend.value.toFixed(1)}%</span>
             <span>{trend.isUpward ? '↑' : '↓'}</span>
           </div>
         )}

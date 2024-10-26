@@ -20,6 +20,7 @@ import {
   Activity
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
+import { useWizard } from '@/providers/WizardProvider';
 
 interface ProfileSectionProps {
   title: string;
@@ -164,6 +165,7 @@ const WeightChart: React.FC<{ data: { weight: number; date: string }[] }> = ({ d
 const Profile: React.FC = () => {
   const navigate = useNavigate();
   const { client, logout, membership } = useAuthStore();
+  const { openWizard } = useWizard();
 
   if (!client || !membership) return null;
 
@@ -174,7 +176,7 @@ const Profile: React.FC = () => {
   const weightChange = lastWeight - startWeight;
   const progressPercentage = Math.abs(
     ((lastWeight - startWeight) / (client.target_weight - startWeight)) * 100
-  ).toFixed(1);
+  ).toFixed(0);
 
   return (
     <div className="space-y-6 pb-20 animate-fade-in">
@@ -208,7 +210,7 @@ const Profile: React.FC = () => {
           icon={<Target className="w-5 h-5 text-blue-500" />}
           label="Progress to Goal"
           value={`${progressPercentage}%`}
-          trend={`${Math.abs(weightChange).toFixed(1)}kg ${weightChange < 0 ? 'lost' : 'gained'}`}
+          trend={`${Math.abs(weightChange).toFixed(0)} kg ${weightChange < 0 ? 'lost' : 'gained'}`}
           trendUp={client.goal === 'Weight Loss' ? weightChange < 0 : weightChange > 0}
         />
         <StatCard
@@ -330,6 +332,15 @@ const Profile: React.FC = () => {
 
       {/* Actions */}
       <div className="space-y-2">
+      {client?.allow_preference_update === 1 && (
+        <button
+          onClick={() => openWizard('preferences')}
+          className="flex items-center space-x-2 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
+        >
+          <Settings className="w-4 h-4" />
+          <span className="text-sm font-medium">Update Preferences</span>
+        </button>
+      )}
         <button
           onClick={() => logout()}
           className="w-full p-4 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-colors"

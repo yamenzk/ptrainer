@@ -1,10 +1,8 @@
 from __future__ import unicode_literals
 from typing import Dict, List, Optional, Any, TypedDict, Tuple, Set
-# from dataclasses import dataclass
-# from datetime import datetime, timedelta
 import hashlib
-# import json
 import frappe
+from frappe.utils import getdate
 from ptrainer.config.nutrition import get_nutrient_mappings
 
 # Type definitions
@@ -467,3 +465,39 @@ def get_membership(membership: str) -> Dict[str, Any]:
     except Exception as e:
         frappe.log_error(f"Error in get_membership: {str(e)}")
         return {"message": f"An error occurred: {str(e)}"}
+
+
+@frappe.whitelist(allow_guest=True)
+def update_client(client_id, **kwargs):
+    client_doc = frappe.get_doc("Client", client_id)
+    
+    # Iterate through provided fields and values in kwargs
+    for field, value in kwargs.items():
+        # Check for 'weight' field to add a new entry in the weight child table
+        if field == "weight":
+            client_doc.append("weight", {
+                "weight": float(value),  # Cast to float for numeric fields
+                "date": getdate()
+            })
+        # Check for 'exercise' field to add a row to exercise_performance table
+        elif field == "exercise":
+            # Expecting a comma-separated string for exercise details
+            exercise_details = value.split(",")
+            if len(exercise_details) == 3:
+                exercise_name, weight, reps = exercise_details
+                client_doc.append("exercise_performance", {
+                    "exercise": exercise_name,
+                    "weight": float(weight),
+                    "reps": int(reps),
+                    "date": getdate()
+                })
+        # Update other fields directly if they exist in the Client doctype
+        else:
+            if hasattr(client_doc, field):
+                setattr(client_doc, field, value)
+    
+    # Save and commit the updated Client document
+    client_doc.save(ignore_permissions=True)
+    frappe.db.commit()
+
+    return {"status": "success", "message": "Client updated successfully"}

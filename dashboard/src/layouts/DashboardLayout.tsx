@@ -14,8 +14,10 @@ import { useAuthStore } from '@/stores/authStore';
 import { RouteTransition } from '@/components/ui/route-transition';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
+import { useCheckWizardRequirements } from '@/hooks/useCheckWizardRequirements';
 
 const DashboardLayout: React.FC = () => {
+  useCheckWizardRequirements();
   const navigate = useNavigate();
   const location = useLocation();
   const { client, logout } = useAuthStore();

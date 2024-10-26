@@ -149,11 +149,11 @@ const MealCard: React.FC<{
                       <Beef className="w-3.5 h-3.5 mr-0.5" />
                       <span>{Math.round(food.nutrition.protein.value)}g</span>
                     </div>
-                    <div className="flex items-center text-xs text-yellow-500">
+                    <div className="flex items-center text-xs text-green-500">
                       <Wheat className="w-3.5 h-3.5 mr-0.5" />
                       <span>{Math.round(food.nutrition.carbs.value)}g</span>
                     </div>
-                    <div className="flex items-center text-xs text-blue-500">
+                    <div className="flex items-center text-xs text-yellow-500">
                       <Droplet className="w-3.5 h-3.5 mr-0.5" />
                       <span>{Math.round(food.nutrition.fat.value)}g</span>
                     </div>
@@ -278,15 +278,15 @@ const MealPlans: React.FC = () => {
             label="Carbs"
             value={dailyTotals.carbs.value}
             percentage={macroPercentages.carbs}
-            color="#F59E0B"
-            icon={<Wheat className="w-5 h-5 text-yellow-500" />}
+            color="#22C55E"
+            icon={<Wheat className="w-5 h-5 text-green-500" />}
           />
           <MacroCircle
             label="Fats"
             value={dailyTotals.fat.value}
             percentage={macroPercentages.fat}
-            color="#3B82F6"
-            icon={<Droplet className="w-5 h-5 text-blue-500" />}
+            color="#F59E0B "
+            icon={<Droplet className="w-5 h-5 text-yellow-500" />}
           />
         </div>
 
