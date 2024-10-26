@@ -116,15 +116,16 @@ const SetupWizardContent: React.FC<SetupWizardContentProps> = ({
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [showExitAnimation, setShowExitAnimation] = useState(false);
 
-  useEffect(() => {
-    const availableSteps = getStepsForMode(mode, exercise);
-    setSteps(availableSteps);
-  }, [mode, exercise]);
+  // In SetupWizardContent component
+useEffect(() => {
+  const availableSteps = getStepsForMode(mode, exercise, client);
+  setSteps(availableSteps);
+}, [mode, exercise, client]);
 
   const validateStep = (step: Step): boolean => {
     const value = formData[step.field];
     
-    if (!value && Object.keys(formData).includes(step.field)) {
+    if (!value || (typeof value === 'string' && !value.trim())) {
       setValidationErrors(prev => ({
         ...prev,
         [step.field]: 'This field is required'
@@ -176,24 +177,27 @@ const SetupWizardContent: React.FC<SetupWizardContentProps> = ({
     setCurrentStep(prev => prev - 1);
   };
 
+  const formatDateForSubmission = (dateStr: string): string => {
+    const [day, month, year] = dateStr.split('-');
+    return `${year}-${month}-${day}`;
+  };
+
   const submitChanges = async () => {
     if (!client?.name) return;
-
+  
     const params = new URLSearchParams();
     params.append('client_id', client.name);
-
-    if (mode === 'performance' && exercise) {
-      const performance = formData.exercise_performance;
-      if (performance) {
-        params.append('exercise', `${exercise},${performance.weight},${performance.reps}`);
-      }
-    } else {
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value !== undefined) {
+  
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== undefined) {
+        // Format date if it's the date_of_birth field
+        if (key === 'date_of_birth') {
+          params.append(key, formatDateForSubmission(value as string));
+        } else {
           params.append(key, value.toString());
         }
-      });
-    }
+      }
+    });
 
     const response = await fetch(`/api/v2/method/ptrainer.ptrainer_methods.update_client?${params.toString()}`);
     const result = await response.json();

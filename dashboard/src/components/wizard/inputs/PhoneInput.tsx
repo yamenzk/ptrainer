@@ -17,13 +17,19 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({ value, onChange }) => {
 
   // Format phone number as user types
   const formatPhoneNumber = (input: string) => {
-    // Remove all non-numeric characters except +
-    const cleaned = input.replace(/[^\d+]/g, '');
+    // Remove all non-numeric characters
+    const cleaned = input.replace(/\D/g, '');
     
-    // Add + if it doesn't exist at the start
-    if (!cleaned.startsWith('+')) {
-      return `+${cleaned}`;
+    // Add + if starts with double zero
+    if (cleaned.startsWith('00')) {
+      return '+' + cleaned.slice(2);
     }
+    
+    // Add + if it's a country code (assuming country codes are 1-3 digits)
+    if (cleaned.length > 7 && cleaned.match(/^[1-9]/)) {
+      return '+' + cleaned;
+    }
+    
     return cleaned;
   };
 

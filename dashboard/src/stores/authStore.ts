@@ -9,8 +9,11 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   membership: Membership | null;
+  requiresOnboarding: boolean;
+  requiresWeightUpdate: boolean;
   plans: Plan[];
   references: References | null;
+  
   
   login: (data: LoginResponse['data']) => void;
   logout: () => void;
@@ -18,6 +21,8 @@ interface AuthState {
   setError: (error: string | null) => void;
   clearError: () => void;  // Added this function
   setLoading: (isLoading: boolean) => void;
+  setRequiresOnboarding: (requires: boolean) => void;
+  setRequiresWeightUpdate: (requires: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -27,6 +32,8 @@ export const useAuthStore = create<AuthState>()(
       isLoading: true,
       error: null,
       membership: null,
+      requiresOnboarding: false,
+      requiresWeightUpdate: false,
       client: null,
       plans: [],
       references: null,
@@ -88,6 +95,8 @@ export const useAuthStore = create<AuthState>()(
       setError: (error) => set({ error }),
       clearError: () => set({ error: null }),  // Added clearError implementation
       setLoading: (isLoading) => set({ isLoading }),
+      setRequiresOnboarding: (requires) => set({ requiresOnboarding: requires }),
+      setRequiresWeightUpdate: (requires) => set({ requiresWeightUpdate: requires }),
     }),
     {
       name: 'auth-storage',

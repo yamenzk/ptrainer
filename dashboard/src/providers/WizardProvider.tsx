@@ -1,7 +1,7 @@
-// src/providers/WizardProvider.tsx
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SetupWizard } from '@/components/wizard/SetupWizard';
 import type { WizardMode } from '@/types/types';
+import { useAuthStore } from '@/stores/authStore';
 
 interface WizardContextType {
   isOpen: boolean;
@@ -17,6 +17,21 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<WizardMode | null>(null);
   const [exerciseData, setExerciseData] = useState<{ name: string } | null>(null);
+  
+  const requiresOnboarding = useAuthStore(state => state.requiresOnboarding);
+  const requiresWeightUpdate = useAuthStore(state => state.requiresWeightUpdate);
+  const setRequiresOnboarding = useAuthStore(state => state.setRequiresOnboarding);
+  const setRequiresWeightUpdate = useAuthStore(state => state.setRequiresWeightUpdate);
+
+  useEffect(() => {
+    if (requiresOnboarding) {
+      openWizard('onboarding');
+      setRequiresOnboarding(false);
+    } else if (requiresWeightUpdate) {
+      openWizard('weight-update');
+      setRequiresWeightUpdate(false);
+    }
+  }, [requiresOnboarding, requiresWeightUpdate]);
 
   const openWizard = (newMode: WizardMode, newExerciseData?: { name: string }) => {
     setMode(newMode);

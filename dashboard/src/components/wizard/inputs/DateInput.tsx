@@ -114,23 +114,17 @@ export const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
 
           {/* Calendar */}
           <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={handleSelect}
-            disabled={(date) => {
-              const now = new Date();
-              return (
-                date > now || 
-                date < new Date(minYear, 0, 1) ||
-                date > new Date(maxYear, 11, 31)
-              );
-            }}
-            initialFocus
-            className={cn(
-              "rounded-lg border border-gray-200 dark:border-gray-700",
-              "bg-white dark:bg-gray-800"
-            )}
-          />
+        mode="single"
+        selected={selectedDate}
+        onSelect={handleSelect}
+        disabled={(date) => {
+          const now = new Date();
+          return date > now || date < new Date(minYear, 0, 1);
+        }}
+        initialFocus
+        fromYear={minYear}
+        toYear={maxYear}
+      />
         </div>
       </PopoverContent>
     </Popover>

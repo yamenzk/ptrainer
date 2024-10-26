@@ -8,12 +8,12 @@ import { Toaster } from 'sonner';
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <WizardProvider>
+      <WizardProvider>
+        <AuthProvider>
           <AppRouter />
           <Toaster />
-        </WizardProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </WizardProvider>
     </ThemeProvider>
   );
 }

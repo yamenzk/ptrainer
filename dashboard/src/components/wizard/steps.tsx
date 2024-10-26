@@ -27,7 +27,7 @@ import { ActivityLevelSelect } from './inputs/ActivityLevelSelect';
 import { HeightInput } from './inputs/HeightInput';
 import { WeightInput } from './inputs/WeightInput';
 import { ExercisePerformanceInput } from './inputs/ExercisePerformanceInput';
-
+import type { Client } from '@/types/api';
 export const getAllSteps = (): StepDefinition[StepKey][] => [
   {
     field: 'client_name',
@@ -172,15 +172,43 @@ export const getAllSteps = (): StepDefinition[StepKey][] => [
   } as StepDefinition['exercise_performance']
 ];
 
-export const getStepsForMode = (mode: WizardMode, exercise?: string): Step[] => {
+export const getStepsForMode = (mode: WizardMode, exercise?: string, client?: Client): Step[] => {
   const allSteps = getAllSteps();
   
   switch (mode) {
     case 'onboarding':
+      if (!client) {
+        console.warn('Client object is missing for onboarding mode');
+        return allSteps; // Return all steps if client is not available
+      }
+      
+      const missingFields = [
+        'client_name',
+        'date_of_birth',
+        'gender',
+        'mobile',
+        'nationality',
+        'goal',
+        'target_weight',
+        'meals',
+        'workouts',
+        'equipment',
+        'activity_level',
+        'height',
+        'weight'
+      ].filter(field => {
+        const value = client[field as keyof Client];
+        return value === undefined || value === null || value === '' || value === 0;
+      });
+
+      console.log('Missing fields:', missingFields); // For debugging
+
+      // If no missing fields, return empty array
+      if (missingFields.length === 0) return [];
+
+      // Return only the steps for missing fields
       return allSteps.filter(step => 
-        ['client_name', 'date_of_birth', 'gender', 'mobile', 'nationality', 
-         'goal', 'target_weight', 'meals', 'workouts', 'equipment', 
-         'activity_level', 'height', 'weight'].includes(step.field as string)
+        missingFields.includes(step.field as string)
       );
     
     case 'weight-update':
