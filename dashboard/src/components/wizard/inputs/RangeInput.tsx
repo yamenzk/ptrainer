@@ -1,17 +1,7 @@
-// src/components/wizard/inputs/RangeInput.tsx
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-
-export interface RangeInputProps {
-  value: number;
-  onChange: (value: number) => void;
-  min: number;
-  max: number;
-  step: number;
-  label: (value: number) => string;
-  icon?: React.ReactNode;
-}
+import type { RangeInputProps } from '@/types/types';
 
 export const RangeInput: React.FC<RangeInputProps> = ({
   value,
@@ -129,9 +119,10 @@ export const RangeInput: React.FC<RangeInputProps> = ({
             const markerValue = min + (idx * step);
             const isActive = currentValue >= markerValue;
             return (
-              <motion.div
+              <motion.button
                 key={idx}
-                className="flex flex-col items-center"
+                className="flex flex-col items-center cursor-pointer"
+                onClick={() => onChange(markerValue)}
                 animate={{
                   scale: markerValue === currentValue ? 1.2 : 1,
                   opacity: isActive ? 1 : 0.5
@@ -144,7 +135,7 @@ export const RangeInput: React.FC<RangeInputProps> = ({
                 <span className="text-xs text-gray-500 mt-1">
                   {markerValue}
                 </span>
-              </motion.div>
+              </motion.button>
             );
           })}
         </div>

@@ -1,8 +1,7 @@
 // src/providers/WizardProvider.tsx
 import React, { createContext, useContext, useState } from 'react';
 import { SetupWizard } from '@/components/wizard/SetupWizard';
-
-type WizardMode = 'onboarding' | 'weight-update' | 'preferences' | 'performance' | 'food-preferences';
+import type { WizardMode } from '@/types/types';
 
 interface WizardContextType {
   isOpen: boolean;

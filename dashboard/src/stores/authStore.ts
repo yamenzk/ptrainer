@@ -3,14 +3,12 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { LoginResponse, Client, Membership, Plan, References } from '@/types/api';
 
-
 interface AuthState {
   client: Client | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
   membership: Membership | null;
-  client: Client | null;
   plans: Plan[];
   references: References | null;
   
@@ -18,6 +16,7 @@ interface AuthState {
   logout: () => void;
   refreshData: () => Promise<void>;
   setError: (error: string | null) => void;
+  clearError: () => void;  // Added this function
   setLoading: (isLoading: boolean) => void;
 }
 
@@ -87,6 +86,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setError: (error) => set({ error }),
+      clearError: () => set({ error: null }),  // Added clearError implementation
       setLoading: (isLoading) => set({ isLoading }),
     }),
     {

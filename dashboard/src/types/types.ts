@@ -61,7 +61,7 @@ export type StepDefinition = {
 
 export type StepKey = keyof StepDefinition;
 
-export type WizardMode = 'onboarding' | 'weight-update' | 'preferences' | 'performance' | 'food-preferences';
+export type WizardMode = 'onboarding' | 'weight-update' | 'preferences' | 'performance';
 
 // Input component specific types
 export interface DateInputProps extends StepComponent<string> {}

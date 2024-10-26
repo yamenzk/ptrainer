@@ -13,6 +13,7 @@ import {
   Weight
 } from 'lucide-react';
 import type { StepDefinition, StepKey, Step } from '@/types/types';
+import { WizardMode } from '@/types/types';
 
 // Import all input components
 import { DateInput } from './inputs/DateInput';
@@ -171,7 +172,7 @@ export const getAllSteps = (): StepDefinition[StepKey][] => [
   } as StepDefinition['exercise_performance']
 ];
 
-export const getStepsForMode = (mode: 'onboarding' | 'weight-update' | 'preferences' | 'performance', exercise?: string): Step[] => {
+export const getStepsForMode = (mode: WizardMode, exercise?: string): Step[] => {
   const allSteps = getAllSteps();
   
   switch (mode) {
