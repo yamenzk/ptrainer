@@ -49,6 +49,7 @@ class MembershipCache:
     def get_membership_version(self, membership_id: str) -> str:
         """Get version hash based on membership, client, and plans data"""
         try:
+            CODE_VERSION = "1.1" 
             membership_doc = frappe.get_doc("Membership", membership_id)
             client_doc = frappe.get_doc("Client", membership_doc.client)
             
@@ -59,6 +60,7 @@ class MembershipCache:
             )
             
             version_parts = [
+                f"v:{CODE_VERSION}",
                 f"m:{membership_doc.modified}:{membership_doc.modified_by}",
                 f"c:{client_doc.modified}:{client_doc.modified_by}",
                 f"p:{len(plans)}",

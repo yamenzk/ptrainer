@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true
+  },
+  "files": [
+    "proxyOptions.ts", // Add your file here
+    // other files
+  ],
+  "include": ["vite.config.ts"]
+}
