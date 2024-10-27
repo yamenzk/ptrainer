@@ -199,7 +199,7 @@ useEffect(() => {
       }
     });
 
-    const response = await fetch(`/api/v2/method/ptrainer.ptrainer_methods.update_client?${params.toString()}`);
+    const response = await fetch(`/api/v2/method/ptrainer.ptrainer_methods.update_client?${params.toString()}&request_weight=0`);
     const result = await response.json();
     
     if (!response.ok) {
@@ -410,5 +410,4 @@ useEffect(() => {
   );
 };
 
-// At the bottom of SetupWizard.tsx, add:
 export { SetupWizardWrapper as SetupWizard };

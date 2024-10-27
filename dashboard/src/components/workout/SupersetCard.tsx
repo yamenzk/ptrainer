@@ -1,6 +1,6 @@
 // src/components/workout/SupersetCard.tsx
 import React from 'react';
-import { Dumbbell, Clock, ArrowRight } from 'lucide-react';
+import { Dumbbell, Clock, ArrowDownUp } from 'lucide-react';
 import type { Exercise, ExerciseReference } from '@/types/api';
 
 interface SupersetCardProps {
@@ -60,7 +60,7 @@ export const SupersetCard: React.FC<SupersetCardProps> = ({
               {/* Arrow connector */}
               {index < exercises.length - 1 && (
                 <div className="flex justify-center">
-                  <ArrowRight className="w-5 h-5 text-purple-400 dark:text-purple-500" />
+                  <ArrowDownUp className="w-5 h-5 text-purple-400 dark:text-purple-500" />
                 </div>
               )}
             </React.Fragment>
