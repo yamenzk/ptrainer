@@ -93,3 +93,16 @@ export interface RangeInputProps {
   label: (value: number) => string;
   icon?: React.ReactNode;
 }
+
+export interface ExerciseData {
+  name: string;
+  dayKey: string;
+}
+
+export interface WizardContextType {
+  isOpen: boolean;
+  mode: WizardMode | null;
+  exerciseData: ExerciseData | null;
+  openWizard: (mode: WizardMode, exerciseData?: ExerciseData) => void;
+  closeWizard: () => void;
+}

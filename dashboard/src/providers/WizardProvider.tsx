@@ -1,22 +1,15 @@
+// src/providers/WizardProvider.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SetupWizard } from '@/components/wizard/SetupWizard';
-import type { WizardMode } from '@/types/types';
+import type { WizardMode, WizardContextType, ExerciseData } from '@/types/types';
 import { useAuthStore } from '@/stores/authStore';
-
-interface WizardContextType {
-  isOpen: boolean;
-  mode: WizardMode | null;
-  exerciseData: { name: string } | null;
-  openWizard: (mode: WizardMode, exerciseData?: { name: string }) => void;
-  closeWizard: () => void;
-}
 
 const WizardContext = createContext<WizardContextType | undefined>(undefined);
 
 export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<WizardMode | null>(null);
-  const [exerciseData, setExerciseData] = useState<{ name: string } | null>(null);
+  const [exerciseData, setExerciseData] = useState<ExerciseData | null>(null);
   
   const requiresOnboarding = useAuthStore(state => state.requiresOnboarding);
   const requiresWeightUpdate = useAuthStore(state => state.requiresWeightUpdate);
@@ -33,7 +26,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [requiresOnboarding, requiresWeightUpdate]);
 
-  const openWizard = (newMode: WizardMode, newExerciseData?: { name: string }) => {
+  const openWizard = (newMode: WizardMode, newExerciseData?: ExerciseData) => {
     setMode(newMode);
     if (newExerciseData) setExerciseData(newExerciseData);
     setIsOpen(true);
@@ -52,6 +45,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         <SetupWizard 
           mode={mode} 
           exercise={exerciseData?.name}
+          exerciseData={exerciseData || undefined} // Convert null to undefined
           onClose={mode !== 'onboarding' ? closeWizard : undefined}
         />
       )}

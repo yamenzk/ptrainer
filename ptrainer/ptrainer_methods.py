@@ -47,7 +47,7 @@ class MembershipCache:
     def get_membership_version(self, membership_id: str) -> str:
         """Get version hash based on membership, client, and plans data"""
         try:
-            CODE_VERSION = "1.1" 
+            CODE_VERSION = "1.2" 
             membership_doc = frappe.get_doc("Membership", membership_id)
             client_doc = frappe.get_doc("Client", membership_doc.client)
             
@@ -233,7 +233,7 @@ def process_food_instance(food_item: Any, food_reference_data: Dict[str, Any]) -
         'meal': food_item.meal,
         'ref': food_item.food,
         'amount': food_item.amount,
-        'nutrition': nutrition
+        'nutrition': nutrition,
     }
 
 def process_exercise_performance(performance_docs: List[Any]) -> Dict[str, List[Dict[str, Any]]]:
@@ -261,6 +261,7 @@ def process_exercise_instance(exercise_item: Any, performance_data: Dict[str, Li
         'sets': exercise_item.sets,
         'reps': exercise_item.reps,
         'rest': exercise_item.rest,
+        'logged': exercise_item.logged
     }
 
 def process_day_exercises(exercises: List[Any], performance_data: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -468,32 +469,50 @@ def get_membership(membership: str) -> Dict[str, Any]:
 
 
 @frappe.whitelist(allow_guest=True)
-def update_client(client_id, **kwargs):
+def update_client(client_id, is_performance=0, exercise_ref=None, exercise_day=None, **kwargs):
     client_doc = frappe.get_doc("Client", client_id)
     
-    # Iterate through provided fields and values in kwargs
-    for field, value in kwargs.items():
-        # Check for 'weight' field to add a new entry in the weight child table
-        if field == "weight":
-            client_doc.append("weight", {
-                "weight": float(value),  # Cast to float for numeric fields
+    # Check if is_performance is set to 1 and necessary fields are provided
+    if int(is_performance) == 1 and exercise_ref and exercise_day:
+        # Add a row to the exercise_performance child table
+        if "weight" in kwargs and "reps" in kwargs:
+            client_doc.append("exercise_performance", {
+                "exercise": exercise_ref,
+                "weight": float(kwargs["weight"]),
+                "reps": int(kwargs["reps"]),
                 "date": getdate()
             })
-        # Check for 'exercise' field to add a row to exercise_performance table
-        elif field == "exercise":
-            # Expecting a comma-separated string for exercise details
-            exercise_details = value.split(",")
-            if len(exercise_details) == 3:
-                exercise_name, weight, reps = exercise_details
-                client_doc.append("exercise_performance", {
-                    "exercise": exercise_name,
-                    "weight": float(weight),
-                    "reps": int(reps),
+
+            # Fetch the 'Active' Plan for the client
+            active_plan = frappe.get_all("Plan", filters={
+                "client": client_id,
+                "status": "Scheduled"
+            }, fields=["name"], limit=1)
+
+            if active_plan:
+                # Get the Plan document
+                plan_doc = frappe.get_doc("Plan", active_plan[0].name)
+                
+                # Convert exercise_day (e.g., "day_1") to the table name (e.g., "d1_e")
+                day_table = exercise_day.replace("day_", "d") + "_e"
+                
+                # Search for the exercise in the specified day table
+                for row in plan_doc.get(day_table, []):
+                    if row.exercise == exercise_ref:
+                        row.logged = 1  # Mark as logged
+                        break
+
+                # Save the updated Plan document
+                plan_doc.save(ignore_permissions=True)
+    else:
+    # Process other fields normally as in the original method
+        for field, value in kwargs.items():
+            if field == "weight":
+                client_doc.append("weight", {
+                    "weight": float(value),
                     "date": getdate()
                 })
-        # Update other fields directly if they exist in the Client doctype
-        else:
-            if hasattr(client_doc, field):
+            elif hasattr(client_doc, field):
                 setattr(client_doc, field, value)
     
     # Save and commit the updated Client document

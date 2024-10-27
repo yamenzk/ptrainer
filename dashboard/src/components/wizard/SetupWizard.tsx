@@ -13,10 +13,13 @@ import { cn } from '@/lib/utils';
 import { getAllSteps, getStepsForMode } from './steps';
 import type { Step, WizardMode, FormFields } from '@/types/types';
 import type { Client } from '@/types/api';
+import { ExercisePerformance } from '@/types/api';
+import { ExerciseData } from '@/types/types';
 
 interface SetupWizardProps {
   mode: WizardMode;
   exercise?: string;
+  exerciseData?: ExerciseData;
   onClose?: () => void;
 }
 
@@ -104,6 +107,7 @@ interface SetupWizardContentProps extends SetupWizardProps {
 const SetupWizardContent: React.FC<SetupWizardContentProps> = ({
   mode,
   exercise,
+  exerciseData,
   onClose,
   client,
   refreshData
@@ -144,7 +148,10 @@ useEffect(() => {
 
   const handleNext = async () => {
     if (!validateStep(steps[currentStep])) {
-      toast.error("Please complete this step before continuing");
+      toast.error("Please complete this step before continuing",{
+        duration: 3000,
+        dismissible: true,
+      });
       return;
     }
 
@@ -154,7 +161,10 @@ useEffect(() => {
         await submitChanges();
         await refreshData();
         setShowExitAnimation(true);
-        toast.success("Profile updated successfully!");
+        toast.success("Profile updated successfully!",{
+          duration: 3000,
+          dismissible: true,
+        });
         
         if (onClose) {
           await new Promise(resolve => setTimeout(resolve, 800));
@@ -162,7 +172,10 @@ useEffect(() => {
         }
       } catch (error) {
         console.error(error);
-        toast.error("Failed to update profile");
+        toast.error("Failed to update profile",{
+          duration: 3000,
+          dismissible: true,
+        });
       } finally {
         setIsSubmitting(false);
       }
@@ -190,9 +203,15 @@ useEffect(() => {
   
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== undefined) {
-        // Format date if it's the date_of_birth field
         if (key === 'date_of_birth') {
           params.append(key, formatDateForSubmission(value as string));
+        } else if (key === 'exercise_performance') {
+          const performance = value as ExercisePerformance;
+          params.append('is_performance', '1')
+          params.append('exercise_ref', exercise || '');
+          params.append('exercise_day', exerciseData?.dayKey || '');
+          params.append('weight', performance.weight.toString());
+          params.append('reps', performance.reps.toString());
         } else {
           params.append(key, value.toString());
         }

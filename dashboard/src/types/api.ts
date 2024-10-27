@@ -83,6 +83,7 @@ export interface Exercise {
   sets: number;
   reps: number;
   rest: number;
+  logged: number; // Add this field
 }
 
 export interface RegularExercise {
@@ -159,6 +160,7 @@ export interface PerformanceEntry {
   weight: number;
   reps: number;
   date: string;
+  logged?: boolean;
 }
 
 export interface References {
