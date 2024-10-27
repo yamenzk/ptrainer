@@ -6,7 +6,9 @@ import {
   ArrowRight, 
   ArrowLeft, 
   CheckCircle2,
-  Loader2
+  Loader2,
+  ChevronRight,
+  X
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -36,43 +38,79 @@ const SetupWizardWrapper: React.FC<SetupWizardProps> = (props) => {
 // Background Elements Component
 const BackgroundElements = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden">
-    <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
-    <motion.div
-      className="absolute top-0 -left-40 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"
-      animate={{
-        x: [0, 120, 0],
-        y: [0, 100, 0],
-      }}
-      transition={{
-        duration: 12,
-        repeat: Infinity,
-        repeatType: "reverse",
-      }}
-    />
-    <motion.div
-      className="absolute -bottom-8 left-20 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"
-      animate={{
-        x: [60, -60, 60],
-        y: [0, -100, 0],
-      }}
-      transition={{
-        duration: 18,
-        repeat: Infinity,
-        repeatType: "reverse",
-      }}
-    />
-    <motion.div
-      className="absolute top-60 -right-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"
-      animate={{
-        x: [0, -100, 0],
-        y: [0, 120, 0],
-      }}
-      transition={{
-        duration: 15,
-        repeat: Infinity,
-        repeatType: "reverse",
-      }}
-    />
+    {/* Modern Grid Pattern */}
+    <div className="absolute inset-0 bg-grid-white/[0.02] dark:bg-grid-black/[0.02]" />
+    
+    {/* Gradient Orbs */}
+    <div className="absolute inset-0">
+      <motion.div
+        className="absolute top-1/4 -left-40 w-96 h-96 bg-purple-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50"
+        animate={{
+          x: [0, 120, 0],
+          y: [0, -50, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      />
+      <motion.div
+        className="absolute -bottom-20 -right-20 w-96 h-96 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50"
+        animate={{
+          x: [0, -70, 0],
+          y: [0, 50, 0],
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      />
+      <motion.div
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50"
+        animate={{
+          scale: [1, 1.2, 1],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      />
+    </div>
+
+    {/* Optional: Subtle noise texture */}
+    <div className="absolute inset-0 bg-noise opacity-[0.02]" />
+  </div>
+);
+
+const StepIndicator: React.FC<{ currentStep: number; totalSteps: number }> = ({ currentStep, totalSteps }) => (
+  <div className="absolute top-8 left-1/2 -translate-x-1/2">
+    <div className="flex items-center space-x-2">
+      {Array.from({ length: totalSteps }).map((_, index) => (
+        <motion.div
+          key={index}
+          className={cn(
+            "relative h-2 rounded-full transition-all duration-300",
+            index === currentStep ? "w-8 bg-blue-500" : "w-2 bg-gray-200 dark:bg-gray-700"
+          )}
+          initial={false}
+          animate={{
+            scale: index === currentStep ? 1.2 : 1,
+          }}
+        >
+          {index < currentStep && (
+            <motion.div
+              className="absolute inset-0 bg-green-500 rounded-full"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            />
+          )}
+        </motion.div>
+      ))}
+    </div>
   </div>
 );
 
@@ -204,7 +242,7 @@ useEffect(() => {
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== undefined) {
         if (key === 'date_of_birth') {
-          params.append(key, formatDateForSubmission(value as string));
+          
         } else if (key === 'exercise_performance') {
           const performance = value as ExercisePerformance;
           params.append('is_performance', '1')
@@ -235,112 +273,72 @@ useEffect(() => {
       }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3 }}
-      className="fixed inset-0 bg-white dark:bg-gray-900 z-50"
+      className="fixed inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50"
     >
       <BackgroundElements />
 
-      {/* Progress bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100 dark:bg-gray-800">
-        <motion.div
-          className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
-          animate={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        />
-      </div>
+      <div className="relative h-full flex flex-col max-w-2xl mx-auto pt-24 px-4">
+        {/* Progress Indicator */}
+        <StepIndicator currentStep={currentStep} totalSteps={steps.length} />
 
-      {/* Steps Indicator */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2">
-        <div className="flex items-center space-x-2">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.field}
-              className={cn(
-                "w-2 h-2 rounded-full",
-                index === currentStep 
-                  ? "bg-blue-500" 
-                  : index < currentStep 
-                    ? "bg-gray-300 dark:bg-gray-700" 
-                    : "bg-gray-200 dark:bg-gray-800"
-              )}
-              animate={{
-                scale: index === currentStep ? 1.5 : 1
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="h-full flex flex-col pt-20">
-        <main className="flex-1 flex items-center justify-center p-6">
-          <div className="w-full max-w-md">
-            <StepTransition direction={direction}>
-              {steps[currentStep] && (
-                <div className="space-y-8">
-                  {/* Step Header */}
-                  <motion.div 
-                    className="text-center"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <div className="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                      {React.createElement(steps[currentStep].icon, {
-                        className: "w-8 h-8 text-blue-500"
-                      })}
-                    </div>
-                    <h2 className="text-2xl font-bold mb-2">
-                      {steps[currentStep].title}
-                    </h2>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      {steps[currentStep].description}
-                    </p>
-                  </motion.div>
-
-                  {/* Step Content */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    {React.createElement(steps[currentStep].component, {
-                      value: formData[steps[currentStep].field],
-                      onChange: (value: any) => {
-                        setFormData(prev => ({
-                          ...prev,
-                          [steps[currentStep].field]: value
-                        }));
-                        validateStep(steps[currentStep]);
-                      }
+        {/* Main Content */}
+        <div className="flex-1 flex items-center justify-center">
+          <StepTransition direction={direction}>
+            {steps[currentStep] && (
+              <div className="w-full space-y-8">
+                {/* Step Header */}
+                <motion.div 
+                  className="text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <div className="inline-flex mb-6 p-3 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm">
+                    {React.createElement(steps[currentStep].icon, {
+                      className: "w-8 h-8 text-blue-500"
                     })}
+                  </div>
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                    {steps[currentStep].title}
+                  </h2>
+                  <p className="mt-3 text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+                    {steps[currentStep].description}
+                  </p>
+                </motion.div>
 
-                    {/* Validation Error */}
-                    {validationErrors[steps[currentStep].field] && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-2 text-sm text-red-500"
-                      >
-                        {validationErrors[steps[currentStep].field]}
-                      </motion.p>
-                    )}
-                  </motion.div>
-                </div>
-              )}
-            </StepTransition>
-          </div>
-        </main>
+                {/* Step Content */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl shadow-black/5 ring-1 ring-gray-900/5 dark:ring-white/5"
+                >
+                  {React.createElement(steps[currentStep].component, {
+                    value: formData[steps[currentStep].field],
+                    onChange: (value: any) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        [steps[currentStep].field]: value
+                      }));
+                      validateStep(steps[currentStep]);
+                    }
+                  })}
+                </motion.div>
+              </div>
+            )}
+          </StepTransition>
+        </div>
 
         {/* Navigation */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-800">
+        <div className="py-8">
           <div className="flex items-center justify-between max-w-md mx-auto">
             <motion.button
               onClick={handleBack}
               className={cn(
-                "p-4 rounded-xl flex items-center space-x-2 text-gray-500",
-                currentStep === 0 
-                  ? "opacity-0 pointer-events-none" 
-                  : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                "flex items-center space-x-2 px-6 py-3 rounded-xl text-gray-600 dark:text-gray-300",
+                "hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors",
+                "disabled:opacity-50 disabled:cursor-not-allowed",
+                currentStep === 0 && "opacity-0 pointer-events-none"
               )}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -353,75 +351,38 @@ useEffect(() => {
             <motion.button
               onClick={handleNext}
               className={cn(
-                "px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-500",
-                "text-white rounded-xl flex items-center space-x-2",
-                "relative overflow-hidden",
-                isSubmitting && "cursor-not-allowed"
+                "flex items-center space-x-3 px-8 py-3 rounded-xl text-white font-medium",
+                "bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600",
+                "shadow-lg shadow-blue-500/25 dark:shadow-blue-500/10",
+                "disabled:opacity-50 disabled:cursor-not-allowed",
+                "relative overflow-hidden"
               )}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={isSubmitting}
             >
-              {/* Button Background Animation */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600"
-                initial={false}
-                animate={{
-                  x: isSubmitting ? "100%" : "0%"
-                }}
-                transition={{
-                  duration: 1,
-                  repeat: isSubmitting ? Infinity : 0,
-                  repeatType: "loop"
-                }}
-              />
-
-              {/* Button Content */}
-              <div className="relative flex items-center space-x-2">
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Updating...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>
-                      {currentStep === steps.length - 1 ? 'Complete Setup' : 'Continue'}
-                    </span>
-                    {currentStep === steps.length - 1 ? (
-                      <CheckCircle2 className="w-5 h-5" />
-                    ) : (
-                      <ArrowRight className="w-5 h-5" />
-                    )}
-                  </>
-                )}
-              </div>
+              <span>
+                {currentStep === steps.length - 1 ? 'Complete' : 'Continue'}
+              </span>
+              {isSubmitting ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <ChevronRight className="w-5 h-5" />
+              )}
             </motion.button>
           </div>
         </div>
 
-        {/* Optional close button for dismissible modes */}
+        {/* Close button for dismissible modes */}
         {onClose && mode !== 'onboarding' && (
           <motion.button
-            className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="absolute top-8 right-8 p-2 rounded-xl bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 
+                     hover:bg-gray-100 dark:hover:bg-gray-700 shadow-lg shadow-black/5 ring-1 ring-gray-900/5 dark:ring-white/5"
             whileHover={{ scale: 1.1, rotate: 90 }}
             whileTap={{ scale: 0.9 }}
             onClick={onClose}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <X className="w-6 h-6" />
           </motion.button>
         )}
       </div>

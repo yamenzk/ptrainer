@@ -91,7 +91,7 @@ export interface RangeInputProps {
   max: number;
   step: number;
   label: (value: number) => string;
-  icon?: React.ReactNode;
+  type: 'meals' | 'workouts';  // Add this line
 }
 
 export interface ExerciseData {
