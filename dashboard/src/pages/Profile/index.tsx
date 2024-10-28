@@ -1,5 +1,5 @@
 // src/pages/Profile/index.tsx
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   User,
@@ -8,14 +8,11 @@ import {
   Flag,
   Calendar,
   Target,
-  Scale,
-  BarChart3,
   Settings,
   Trophy,
   Dumbbell,
   Clock,
   Gauge,
-  LogOut,
   ChevronRight,
   Activity
 } from 'lucide-react';

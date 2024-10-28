@@ -1,7 +1,7 @@
 // src/components/wizard/inputs/HeightInput.tsx
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Ruler, Plus, Minus } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Plus, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { HeightInputProps } from '@/types/types';
 

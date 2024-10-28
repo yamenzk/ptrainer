@@ -3,16 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@/stores/authStore';
 import { 
-  ArrowRight, 
   ArrowLeft, 
-  CheckCircle2,
   Loader2,
   ChevronRight,
   X
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { getAllSteps, getStepsForMode } from './steps';
+import { getStepsForMode } from './steps';
 import type { Step, WizardMode, FormFields } from '@/types/types';
 import type { Client } from '@/types/api';
 import { ExercisePerformance } from '@/types/api';

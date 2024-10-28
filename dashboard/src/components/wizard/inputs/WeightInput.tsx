@@ -1,8 +1,8 @@
 // src/components/wizard/inputs/WeightInput.tsx
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState} from 'react';
+import { motion} from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Scale, ChevronUp, ChevronDown, RotateCcw } from 'lucide-react';
+import { Scale, ChevronUp, ChevronDown } from 'lucide-react';
 import type { WeightInputProps } from '@/types/types';
 
 export const WeightInput: React.FC<WeightInputProps> = ({ value, onChange }) => {

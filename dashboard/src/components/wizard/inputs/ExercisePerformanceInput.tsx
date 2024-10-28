@@ -1,6 +1,6 @@
 // src/components/wizard/inputs/ExercisePerformanceInput.tsx
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Weight,
   Repeat,
@@ -9,7 +9,6 @@ import {
   ChevronDown,
   Trophy,
   History,
-  Scale
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ExercisePerformanceInputProps } from '@/types/types';

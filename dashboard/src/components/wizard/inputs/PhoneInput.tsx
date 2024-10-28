@@ -1,18 +1,9 @@
 // src/components/wizard/inputs/PhoneInput.tsx
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, Check, Search, Globe, ChevronDown } from 'lucide-react';
+import React from 'react';
+import { Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PhoneInputProps } from '@/types/types';
 
-// Common country codes with their countries and flags
-const commonCountries = [
-  { code: '+1', country: 'United States', flag: '🇺🇸' },
-  { code: '+44', country: 'United Kingdom', flag: '🇬🇧' },
-  { code: '+971', country: 'UAE', flag: '🇦🇪' },
-  { code: '+91', country: 'India', flag: '🇮🇳' },
-  { code: '+966', country: 'Saudi Arabia', flag: '🇸🇦' },
-] as const;
 
 export const PhoneInput: React.FC<PhoneInputProps> = ({ value, onChange }) => {
   const formatPhoneNumber = (input: string) => {

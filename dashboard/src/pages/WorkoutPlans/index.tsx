@@ -18,8 +18,7 @@ import type {
   ExerciseReference, 
   Plan,
   DayPlan,
-  RegularExercise,
-  PerformanceEntry 
+  RegularExercise
 } from '@/types/api';
 
 interface DayTabProps {
@@ -83,7 +82,6 @@ interface ExerciseCardProps {
 const ExerciseCard: React.FC<ExerciseCardProps> = ({ 
   exercise, 
   exerciseDetails, 
-  dayKey,
   isActive,
   onClick,
   onLogPerformance 
@@ -225,7 +223,6 @@ const WorkoutPlans: React.FC = () => {
   if (!selectedPlan || !references) return <LoadingScreen />;
 
   const startDate = new Date(selectedPlan.start);
-  const endDate = new Date(selectedPlan.end);
   const dayNumber = Math.floor((selectedDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
   const dayKey = `day_${dayNumber + 1}` as keyof typeof selectedPlan.days;
   const selectedDayPlan = selectedPlan.days[dayKey];

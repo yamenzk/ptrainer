@@ -9,7 +9,6 @@ import {
   Clock,
   MapPin,
   Check,
-  ArrowRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { WorkoutLocationSelectProps } from '@/types/types';

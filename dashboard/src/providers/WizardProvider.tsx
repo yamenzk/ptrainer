@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SetupWizard } from '@/components/wizard/SetupWizard';
 import type { WizardMode, WizardContextType, ExerciseData } from '@/types/types';
 import { useAuthStore } from '@/stores/authStore';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
 const WizardContext = createContext<WizardContextType | undefined>(undefined);
 
