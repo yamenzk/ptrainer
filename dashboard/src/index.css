@@ -75,3 +75,31 @@
     display: none;
   }
 }
+.wizard-content {
+  overflow-y: auto;
+}
+/* In index.css */
+@layer base {
+  /* Remove number input spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+/* In your global CSS */
+.overscroll-contain {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* For iOS devices */
+@supports (-webkit-touch-callout: none) {
+  .overscroll-contain {
+    height: -webkit-fill-available;
+  }
+}

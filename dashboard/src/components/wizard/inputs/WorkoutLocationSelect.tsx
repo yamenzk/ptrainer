@@ -86,8 +86,8 @@ export const WorkoutLocationSelect: React.FC<WorkoutLocationSelectProps> = ({
                 "relative overflow-hidden rounded-2xl",
                 "border transition-colors duration-300",
                 isSelected 
-                  ? "ring-2 ring-offset-2 dark:ring-offset-gray-900"
-                  : "hover:border-gray-300 dark:hover:border-gray-700",
+                  ? "ring-2 ring-offset-2 dark:ring-offset-white-900"
+                  : "hover:border-gray-300 dark:hover:border-white-700",
                 isSelected 
                   ? `ring-${location.gradient.split('-')[1]}-500`
                   : "ring-transparent"
@@ -212,23 +212,6 @@ export const WorkoutLocationSelect: React.FC<WorkoutLocationSelectProps> = ({
           );
         })}
       </div>
-
-      {/* Action Button */}
-      {value && (
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={cn(
-            "w-full p-3 rounded-xl text-white font-medium",
-            "flex items-center justify-center space-x-2",
-            "bg-gradient-to-r",
-            value === 'Home' ? 'from-orange-500 to-pink-500' : 'from-blue-500 to-purple-500'
-          )}
-        >
-          <span>Selected {value === 'Home' ? 'Home Workout' : 'Gym Access'}</span>
-          <ArrowRight className="w-4 h-4" />
-        </motion.button>
-      )}
     </div>
   );
 };

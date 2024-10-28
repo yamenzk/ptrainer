@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SetupWizard } from '@/components/wizard/SetupWizard';
 import type { WizardMode, WizardContextType, ExerciseData } from '@/types/types';
 import { useAuthStore } from '@/stores/authStore';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const WizardContext = createContext<WizardContextType | undefined>(undefined);
 
@@ -32,23 +33,33 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setIsOpen(true);
   };
 
-  const closeWizard = () => {
+  const closeWizard = React.useCallback(() => {
     setIsOpen(false);
     setMode(null);
     setExerciseData(null);
-  };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   return (
     <WizardContext.Provider value={{ isOpen, mode, exerciseData, openWizard, closeWizard }}>
       {children}
-      {isOpen && mode && (
-        <SetupWizard 
-          mode={mode} 
-          exercise={exerciseData?.name}
-          exerciseData={exerciseData || undefined} // Convert null to undefined
-          onClose={mode !== 'onboarding' ? closeWizard : undefined}
-        />
-      )}
+      <AnimatePresence mode="wait" onExitComplete={() => {
+        document.body.style.overflow = 'unset';
+      }}>
+        {isOpen && mode && (
+          <SetupWizard 
+            mode={mode} 
+            exercise={exerciseData?.name}
+            exerciseData={exerciseData || undefined}
+            onClose={closeWizard}
+          />
+        )}
+      </AnimatePresence>
     </WizardContext.Provider>
   );
 };

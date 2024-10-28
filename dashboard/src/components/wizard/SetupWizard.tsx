@@ -160,6 +160,7 @@ const SetupWizardContent: React.FC<SetupWizardContentProps> = ({
 
   // In SetupWizardContent component
 useEffect(() => {
+  document.body.style.overflow = 'hidden';
   const availableSteps = getStepsForMode(mode, exercise, client);
   setSteps(availableSteps);
 }, [mode, exercise, client]);
@@ -228,11 +229,6 @@ useEffect(() => {
     setCurrentStep(prev => prev - 1);
   };
 
-  const formatDateForSubmission = (dateStr: string): string => {
-    const [day, month, year] = dateStr.split('-');
-    return `${year}-${month}-${day}`;
-  };
-
   const submitChanges = async () => {
     if (!client?.name) return;
   
@@ -242,7 +238,7 @@ useEffect(() => {
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== undefined) {
         if (key === 'date_of_birth') {
-          
+          params.append(key, value);
         } else if (key === 'exercise_performance') {
           const performance = value as ExercisePerformance;
           params.append('is_performance', '1')
@@ -252,11 +248,14 @@ useEffect(() => {
           params.append('reps', performance.reps.toString());
         } else {
           params.append(key, value.toString());
+          if (key === 'weight'){
+            params.append('request_weight', '0');
+          }
         }
       }
     });
 
-    const response = await fetch(`/api/v2/method/ptrainer.ptrainer_methods.update_client?${params.toString()}&request_weight=0`);
+    const response = await fetch(`/api/v2/method/ptrainer.ptrainer_methods.update_client?${params.toString()}`);
     const result = await response.json();
     
     if (!response.ok) {
@@ -274,6 +273,11 @@ useEffect(() => {
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3 }}
       className="fixed inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50"
+      onAnimationComplete={() => {
+        if (showExitAnimation && onClose) {
+          onClose();
+        }
+      }}
     >
       <BackgroundElements />
 
@@ -282,7 +286,7 @@ useEffect(() => {
         <StepIndicator currentStep={currentStep} totalSteps={steps.length} />
 
         {/* Main Content */}
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex-1 flex items-center justify-center wizard-content">
           <StepTransition direction={direction}>
             {steps[currentStep] && (
               <div className="w-full space-y-8">
@@ -311,7 +315,7 @@ useEffect(() => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl shadow-black/5 ring-1 ring-gray-900/5 dark:ring-white/5"
+                  className="rounded-3xl p-8 "
                 >
                   {React.createElement(steps[currentStep].component, {
                     value: formData[steps[currentStep].field],

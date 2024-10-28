@@ -160,10 +160,7 @@ export const WeightInput: React.FC<WeightInputProps> = ({ value, onChange }) => 
           transition={{ type: "spring", bounce: 0.2 }}
         />
         
-                <div className="absolute inset-0 flex justify-between px-2 text-xs text-gray-400">
-                  <span>0 {unit}</span>
-                  <span>{unit === 'kg' ? '150' : '330'} {unit}</span>
-                </div>
+
               </div>
         
               {/* Weight Range Indicator */}

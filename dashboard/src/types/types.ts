@@ -82,7 +82,9 @@ export interface HeightInputProps extends StepComponent<number> {}
 
 export interface WeightInputProps extends StepComponent<number> {}
 
-export interface ExercisePerformanceInputProps extends StepComponent<ExercisePerformance> {}
+export interface ExercisePerformanceInputProps extends StepComponent<ExercisePerformance> {
+  previousRecord?: ExercisePerformance;  // Add this line
+}
 
 export interface RangeInputProps {
   value: number;

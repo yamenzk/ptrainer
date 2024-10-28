@@ -1,107 +1,56 @@
-import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+// src/components/wizard/inputs/PhoneInput.tsx
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Phone, Check, Search, Globe, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PhoneInputProps } from '@/types/types';
 
-// Common country codes with their countries
-const commonCountryCodes = [
-  { code: '+1', country: '🇺🇸 USA' },
-  { code: '+44', country: '🇬🇧 UK' },
-  { code: '+971', country: '🇦🇪 UAE' },
-  { code: '+91', country: '🇮🇳 India' }
+// Common country codes with their countries and flags
+const commonCountries = [
+  { code: '+1', country: 'United States', flag: '🇺🇸' },
+  { code: '+44', country: 'United Kingdom', flag: '🇬🇧' },
+  { code: '+971', country: 'UAE', flag: '🇦🇪' },
+  { code: '+91', country: 'India', flag: '🇮🇳' },
+  { code: '+966', country: 'Saudi Arabia', flag: '🇸🇦' },
 ] as const;
 
 export const PhoneInput: React.FC<PhoneInputProps> = ({ value, onChange }) => {
-  const [focused, setFocused] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Format phone number as user types
   const formatPhoneNumber = (input: string) => {
-    // Remove all non-numeric characters
+    if (!input) return '';
     const cleaned = input.replace(/\D/g, '');
-    
-    // Add + if starts with double zero
-    if (cleaned.startsWith('00')) {
-      return '+' + cleaned.slice(2);
-    }
-    
-    // Add + if it's a country code (assuming country codes are 1-3 digits)
-    if (cleaned.length > 7 && cleaned.match(/^[1-9]/)) {
-      return '+' + cleaned;
-    }
-    
-    return cleaned;
+    if (cleaned.length <= 3) return cleaned;
+    if (cleaned.length <= 6) return `${cleaned.slice(0, 3)} ${cleaned.slice(3)}`;
+    return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`;
   };
 
   return (
     <div className="space-y-4">
       <div className="relative">
-        <motion.input
-          ref={inputRef}
+        <div className="absolute left-4 inset-y-0 flex items-center">
+          <Phone className="w-5 h-5 text-gray-400" />
+        </div>
+        <input
           type="tel"
-          value={value || ''}
-          onChange={(e) => onChange(formatPhoneNumber(e.target.value))}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          className={cn(
-            "w-full p-6 text-lg rounded-2xl outline-none transition-all duration-200",
-            "border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700",
-            "focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-            "placeholder:text-gray-400 dark:placeholder:text-gray-500"
-          )}
-          placeholder="+1 234 567 8900"
-        />
-        
-        {/* Floating Label */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ 
-            opacity: focused || value ? 1 : 0,
-            y: focused || value ? 0 : 10
+          value={formatPhoneNumber(value || '')}
+          onChange={(e) => {
+            const newNumber = e.target.value.replace(/\D/g, '');
+            onChange(newNumber);
           }}
-          className="absolute left-6 top-0 -translate-y-1/2 px-2 bg-white dark:bg-gray-800 text-sm text-gray-500"
-        >
-          Phone Number
-        </motion.div>
+          className={cn(
+            "w-full pl-12 pr-4 py-4 text-lg",
+            "bg-white dark:bg-gray-800 rounded-xl",
+            "border-2 transition-colors duration-200",
+            "border-gray-200 dark:border-gray-700",
+            "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+          )}
+          placeholder="Enter your phone number"
+        />
       </div>
 
-      {/* Common Country Codes */}
-      <div className="grid grid-cols-2 gap-2">
-        {commonCountryCodes.map((option) => (
-          <motion.button
-            key={option.code}
-            onClick={() => {
-              onChange(option.code);
-              inputRef.current?.focus();
-            }}
-            className={cn(
-              "p-3 rounded-xl border transition-all duration-200",
-              "hover:bg-gray-50 dark:hover:bg-gray-700/50",
-              value?.startsWith(option.code) 
-                ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                : "border-gray-200 dark:border-gray-700"
-            )}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="text-center space-y-1">
-              <span className="text-lg">{option.code}</span>
-              <p className="text-xs text-gray-500">{option.country}</p>
-            </div>
-          </motion.button>
-        ))}
+      {/* Format Example */}
+      <div className="text-sm text-gray-500 dark:text-gray-400">
+        Example: XXX XXX XXXX
       </div>
-
-      {/* Validation Message */}
-      {value && !value.match(/^\+\d{1,}$/) && (
-        <motion.p
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-sm text-red-500"
-        >
-          Please enter a valid phone number
-        </motion.p>
-      )}
     </div>
   );
 };

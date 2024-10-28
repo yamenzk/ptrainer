@@ -272,37 +272,47 @@ const Profile: React.FC = () => {
 
       {/* Training Preferences */}
       <ProfileSection title="Training Preferences" icon={<Dumbbell className="w-5 h-5 text-purple-500" />} delay={300}>
-            <div className="grid grid-cols-2 gap-4 p-4">
-              <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4">
-                <div className="flex items-center space-x-2">
-                  <Target className="w-5 h-5 text-purple-500" />
-                  <p className="font-medium">{client.goal}</p>
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Goal</p>
-              </div>
-              <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4">
-                <div className="flex items-center space-x-2">
-                  <Dumbbell className="w-5 h-5 text-purple-500" />
-                  <p className="font-medium">{client.equipment}</p>
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Equipment</p>
-              </div>
-              <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4">
-                <div className="flex items-center space-x-2">
-                  <Activity className="w-5 h-5 text-purple-500" />
-                  <p className="font-medium">{client.activity_level}</p>
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Activity Level</p>
-              </div>
-              <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4">
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-5 h-5 text-purple-500" />
-                  <p className="font-medium">{client.workouts}/week</p>
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Workout Frequency</p>
-              </div>
-            </div>
-          </ProfileSection>
+  <div className="grid grid-cols-2 gap-4 p-4">
+    <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4">
+      <div className="flex items-center space-x-2">
+        <Target className="w-5 h-5 text-purple-500" />
+        <p className="font-medium">{client.goal}</p>
+      </div>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Goal</p>
+    </div>
+    <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4">
+      <div className="flex items-center space-x-2">
+        <Dumbbell className="w-5 h-5 text-purple-500" />
+        <p className="font-medium">{client.equipment}</p>
+      </div>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Equipment</p>
+    </div>
+    <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4">
+      <div className="flex items-center space-x-2">
+        <Activity className="w-5 h-5 text-purple-500" />
+        <p className="font-medium">{client.activity_level}</p>
+      </div>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Activity Level</p>
+    </div>
+    <div className="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4">
+      <div className="flex items-center space-x-2">
+        <Clock className="w-5 h-5 text-purple-500" />
+        <p className="font-medium">{client.workouts}/week</p>
+      </div>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Workout Frequency</p>
+    </div>
+    {client?.allow_preference_update === 1 && (
+      <button
+        onClick={() => openWizard('preferences')}
+        className="col-span-2 flex items-center justify-center space-x-2 p-4 bg-purple-500 text-white rounded-xl shadow-lg hover:bg-purple-600 transition-colors"
+      >
+        <Settings className="w-5 h-5" />
+        <span className="text-sm font-medium">Update Preferences</span>
+      </button>
+    )}
+  </div>
+</ProfileSection>
+
 
       {/* Membership */}
       <ProfileSection title="Membership Details" icon={<Trophy className="w-5 h-5 text-yellow-500" />} delay={400}>
@@ -331,23 +341,15 @@ const Profile: React.FC = () => {
           </ProfileSection>
 
       {/* Actions */}
-      <div className="space-y-2">
-      {client?.allow_preference_update === 1 && (
-        <button
-          onClick={() => openWizard('preferences')}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
-        >
-          <Settings className="w-4 h-4" />
-          <span className="text-sm font-medium">Update Preferences</span>
-        </button>
-      )}
+      <div className="space-y-4 flex flex-col">
         <button
           onClick={() => logout()}
-          className="w-full p-4 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-colors"
+          className="p-4 bg-red-500 text-white rounded-xl shadow-lg font-medium hover:bg-red-600 transition-colors"
         >
           Log Out
         </button>
       </div>
+
     </div>
   );
 };

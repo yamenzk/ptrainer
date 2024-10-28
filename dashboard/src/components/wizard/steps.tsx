@@ -109,6 +109,7 @@ export const getAllSteps = (): StepDefinition[StepKey][] => [
         min={3}
         max={6}
         step={1}
+        type="meals"
         label={(value) => `${value} meals per day`}
       />
     )
@@ -126,6 +127,7 @@ export const getAllSteps = (): StepDefinition[StepKey][] => [
         min={3}
         max={6}
         step={1}
+        type="workouts"
         label={(value) => `${value} workouts per week`}
       />
     )
@@ -177,40 +179,44 @@ export const getStepsForMode = (mode: WizardMode, exercise?: string, client?: Cl
   
   switch (mode) {
     case 'onboarding':
-      if (!client) {
-        console.warn('Client object is missing for onboarding mode');
-        return allSteps; // Return all steps if client is not available
-      }
-      
-      const missingFields = [
-        'client_name',
-        'date_of_birth',
-        'gender',
-        'mobile',
-        'nationality',
-        'goal',
-        'target_weight',
-        'meals',
-        'workouts',
-        'equipment',
-        'activity_level',
-        'height',
-        'weight'
-      ].filter(field => {
-        const value = client[field as keyof Client];
-        return value === undefined || value === null || value === '' || value === 0;
-      });
+  if (!client) {
+    console.warn('Client object is missing for onboarding mode');
+    return allSteps; // Return all steps if client is not available
+  }
 
-      console.log('Missing fields:', missingFields); // For debugging
+  const fieldsToCheck = [
+    'client_name',
+    'date_of_birth',
+    'gender',
+    'mobile',
+    'nationality',
+    'goal',
+    'target_weight',
+    'meals',
+    'workouts',
+    'equipment',
+    'activity_level',
+    'height'
+  ];
+  
+  const missingFields = fieldsToCheck.filter(field => {
+    const value = client[field as keyof Client];
+    return value === undefined || value === null || value === '' || value === 0;
+  });
 
-      // If no missing fields, return empty array
-      if (missingFields.length === 0) return [];
+  // Include "weight" if at least 3 other fields are missing
+  if (missingFields.length >= 3 || client.weight === undefined || client.weight === null) {
+    missingFields.push('weight');
+  }
 
-      // Return only the steps for missing fields
-      return allSteps.filter(step => 
-        missingFields.includes(step.field as string)
-      );
-    
+  // If no fields are missing, return an empty array
+  if (missingFields.length === 0) return [];
+
+  // Return only the steps for missing fields
+  return allSteps.filter(step => 
+    missingFields.includes(step.field as string)
+  );
+  
     case 'weight-update':
       return allSteps.filter(step => step.field === 'weight');
     

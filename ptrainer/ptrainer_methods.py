@@ -47,7 +47,7 @@ class MembershipCache:
     def get_membership_version(self, membership_id: str) -> str:
         """Get version hash based on membership, client, and plans data"""
         try:
-            CODE_VERSION = "1.2" 
+            CODE_VERSION = "1.4" 
             membership_doc = frappe.get_doc("Membership", membership_id)
             client_doc = frappe.get_doc("Client", membership_doc.client)
             
@@ -350,7 +350,7 @@ def process_plan_day(
         'totals': calculate_daily_totals(processed_foods)
     }
 
-def process_plans_batch(plan_docs: List[Any]) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
+def process_plans_batch(plan_docs: List[Any], client_id: str) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
     """Process multiple plans efficiently in batch"""
     reference_data = {'exercises': {}, 'foods': {}, 'performance': {}}
     processed_plans = []
@@ -378,9 +378,18 @@ def process_plans_batch(plan_docs: List[Any]) -> Tuple[Dict[str, Any], List[Dict
         reference_data['foods'][food_id] = process_food_reference_data_cached(food_id)
 
     # Process exercise performance data
+    parent_docs = frappe.get_all(
+        "Client",  # replace with actual parent doctype name
+        filters={"name": client_id},
+        fields=["name"]  # get parent doc names only
+    )
+    
     performance_docs = frappe.get_all(
         "Performance Log",
-        filters={"exercise": ["in", list(all_exercises)]},
+        filters={
+            "parent": ["in", [doc["name"] for doc in parent_docs]],
+            "exercise": ["in", list(all_exercises)]
+        },
         fields=["exercise", "weight", "reps", "date"]
     )
     for doc in performance_docs:
@@ -438,7 +447,7 @@ def get_membership(membership: str) -> Dict[str, Any]:
         plan_docs = [frappe.get_doc("Plan", plan.name) for plan in plans]
 
         # Process plans in batch
-        reference_data, processed_plans = process_plans_batch(plan_docs)
+        reference_data, processed_plans = process_plans_batch(plan_docs, membership_doc.client)
 
         # Build response
         response_data = {

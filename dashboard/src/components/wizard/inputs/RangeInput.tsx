@@ -1,29 +1,35 @@
 // src/components/wizard/inputs/RangeInput.tsx
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import {
   Minus,
-  Plus,
-  Clock,
-  ActivitySquare
+  Plus
 } from 'lucide-react';
 import type { RangeInputProps } from '@/types/types';
 
-const descriptions: Record<'meals' | 'workouts', Record<number, string>> = {
+const content = {
   meals: {
-    3: 'Standard frequency, suitable for most people',
-    4: 'Balanced approach with regular meals',
-    5: 'Higher frequency for better nutrient timing',
-    6: 'Advanced meal timing for specific goals'
+    title: 'meals per day',
+    unit: 'meals/day',
+    descriptions: {
+      3: 'Standard frequency for regular meals',
+      4: 'Optimal spacing for better metabolism',
+      5: 'Higher frequency for nutrient timing',
+      6: 'Advanced meal timing for specific goals'
+    }
   },
   workouts: {
-    3: 'Good for beginners and maintenance',
-    4: 'Balanced approach for steady progress',
-    5: 'Advanced frequency for faster results',
-    6: 'High frequency for experienced trainers'
+    title: 'workouts per week',
+    unit: 'workouts/week',
+    descriptions: {
+      3: 'Great for beginners and busy schedules',
+      4: 'Balanced frequency for steady progress',
+      5: 'High intensity for faster results',
+      6: 'Advanced training for peak performance'
+    }
   }
-};
+} as const;
 
 export const RangeInput: React.FC<RangeInputProps> = ({
   value,
@@ -31,19 +37,15 @@ export const RangeInput: React.FC<RangeInputProps> = ({
   min,
   max,
   step,
-  label,
-  type = 'meals' // Add type prop to determine if it's for meals or workouts
+  type = 'meals'
 }) => {
-  const [isDragging, setIsDragging] = useState(false);
-
   const percentage = ((value - min) / (max - min)) * 100;
+  const currentContent = content[type];
   const stops = Array.from(
     { length: ((max - min) / step) + 1 },
     (_, i) => min + (i * step)
   );
 
-  const descriptions_ = type === 'meals' ? descriptions.meals : descriptions.workouts;
-  
   return (
     <div className="space-y-8">
       {/* Current Value Display */}
@@ -53,8 +55,7 @@ export const RangeInput: React.FC<RangeInputProps> = ({
           animate={{ scale: 1 }}
           className={cn(
             "relative w-32 h-32 rounded-full",
-            "bg-gradient-to-br from-blue-500 to-purple-500",
-            isDragging && "ring-4 ring-blue-500/20"
+            "bg-gradient-to-br from-blue-500 to-purple-500"
           )}
         >
           <div className="absolute inset-1 rounded-full bg-white dark:bg-gray-900" />
@@ -69,53 +70,10 @@ export const RangeInput: React.FC<RangeInputProps> = ({
               {value}
             </motion.span>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {type === 'meals' ? 'meals/day' : 'workouts/week'}
+              {currentContent.unit}
             </span>
           </div>
         </motion.div>
-
-        {/* Floating Icons */}
-        <AnimatePresence>
-          {type === 'meals' ? (
-            [...Array(value)].map((_, i) => (
-              <motion.div
-                key={`meal-${i}`}
-                initial={{ scale: 0, rotate: -30 }}
-                animate={{ 
-                  scale: 1, 
-                  rotate: 0,
-                  transition: { delay: i * 0.1 } 
-                }}
-                exit={{ scale: 0, rotate: 30 }}
-                className="absolute -top-2 w-8 h-8 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center"
-                style={{
-                  left: `${(i * 20) + 40}%`,
-                }}
-              >
-                <Clock className="w-4 h-4 text-blue-500" />
-              </motion.div>
-            ))
-          ) : (
-            [...Array(value)].map((_, i) => (
-              <motion.div
-                key={`workout-${i}`}
-                initial={{ scale: 0, rotate: -30 }}
-                animate={{ 
-                  scale: 1, 
-                  rotate: 0,
-                  transition: { delay: i * 0.1 } 
-                }}
-                exit={{ scale: 0, rotate: 30 }}
-                className="absolute -top-2 w-8 h-8 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center"
-                style={{
-                  left: `${(i * 20) + 40}%`,
-                }}
-              >
-                <ActivitySquare className="w-4 h-4 text-purple-500" />
-              </motion.div>
-            ))
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Description */}
@@ -125,7 +83,7 @@ export const RangeInput: React.FC<RangeInputProps> = ({
         animate={{ opacity: 1, y: 0 }}
         className="text-center text-gray-500 dark:text-gray-400"
       >
-        {descriptions_[value as keyof typeof descriptions_]}
+        {currentContent.descriptions[value as keyof typeof currentContent.descriptions]}
       </motion.div>
 
       {/* Range Slider */}
@@ -185,7 +143,7 @@ export const RangeInput: React.FC<RangeInputProps> = ({
           {/* Value Label */}
           <div className="flex-1 text-center">
             <span className="text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-              {label(value)}
+              {`${value} ${currentContent.title}`}
             </span>
           </div>
 
